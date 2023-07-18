@@ -2,13 +2,15 @@
 // directories to bundled into executable
 import path from "node:path"
 
-// console
+// console, ignore this section since we can't test it very well
+/* c8 ignore start */
 let consoleWidth = process.stdout.columns || 80
 export const wrapOptions = { width: consoleWidth, indent: "" }
 // update consoleWidth when the terminal is resized
 process.stdout.on("resize", () => {
   consoleWidth = process.stdout.columns || 80
 })
+/* c8 ignore end */
 
 // file hashes
 export type fileHashes = { [key: string]: string }
