@@ -1,7 +1,7 @@
 import fse from "fs-extra"
 import path from "node:path"
 import { describe } from "node:test"
-import temp from "temp"
+import { temporaryDirectory } from "tempy"
 
 import {
   configData,
@@ -23,13 +23,6 @@ const relativeK1Config: configData = {
   manualProcessingOutput: "_NEEDS_PROCESSING",
 }
 
-beforeAll(() => {
-  temp.track()
-})
-afterAll(() => {
-  temp.cleanupSync()
-})
-
 // base config retrieval functions
 describe(() => {
   let tempDirPath: string
@@ -37,7 +30,7 @@ describe(() => {
   let configParams: getConfigParams
 
   beforeAll(() => {
-    tempDirPath = temp.mkdirSync()
+    tempDirPath = temporaryDirectory()
     configFile = path.join(tempDirPath, "config.json")
     configParams = { configFile, force: true }
   })
@@ -64,7 +57,7 @@ describe(() => {
   let tempDirPath: string
 
   beforeAll(() => {
-    tempDirPath = temp.mkdirSync()
+    tempDirPath = temporaryDirectory()
     globalThis.configFile = path.join(tempDirPath, "config.json")
     fse.writeJSONSync(globalThis.configFile, relativeK1Config)
   })
@@ -102,7 +95,7 @@ describe(() => {
   let configParams: getConfigParams
 
   beforeAll(() => {
-    tempDirPath = temp.mkdirSync()
+    tempDirPath = temporaryDirectory()
     configFile = path.join(tempDirPath, "config.json")
     configParams = { configFile, force: true }
     fse.writeJSONSync(configFile, relativeK1Config)
@@ -138,7 +131,7 @@ describe(() => {
   let absoluteK1Config: configData
 
   beforeAll(() => {
-    tempDirPath = temp.mkdirSync()
+    tempDirPath = temporaryDirectory()
     configFile = path.join(tempDirPath, "config.json")
     configParams = { configFile, force: true }
 
@@ -180,7 +173,7 @@ describe(() => {
   let mixedK1Config: configData
 
   beforeAll(() => {
-    tempDirPath = temp.mkdirSync()
+    tempDirPath = temporaryDirectory()
     configFile = path.join(tempDirPath, "config.json")
     configParams = { configFile, force: true }
 

@@ -2,7 +2,7 @@ import { Command } from "@commander-js/extra-typings"
 import fse from "fs-extra"
 import path from "node:path"
 import { describe } from "node:test"
-import temp from "temp"
+import { temporaryDirectory } from "tempy"
 
 import {
   FILE_SYSTEM_ERROR,
@@ -37,14 +37,10 @@ let command: Command<any[], any>
 let tempDirPath: string
 beforeAll(() => {
   command = new Command()
-  temp.track()
 
-  tempDirPath = temp.mkdirSync()
+  tempDirPath = temporaryDirectory()
   globalThis.configFile = path.join(tempDirPath, "config.json")
   fse.writeJSONSync(globalThis.configFile, relativeK1Config)
-})
-afterAll(() => {
-  temp.cleanupSync()
 })
 
 let mockExit: any
@@ -105,18 +101,18 @@ describe(() => {
   let properStructure2PathChild1: string
   let properStructure2PathChild2: string
   beforeAll(() => {
-    improperStructurePath = temp.mkdirSync()
+    improperStructurePath = temporaryDirectory()
     improperStructurePathChild1 = path.join(improperStructurePath, "child1")
     improperStructurePathChild2 = path.join(
       improperStructurePathChild1,
       "child2"
     )
 
-    properStructure1Path = temp.mkdirSync()
+    properStructure1Path = temporaryDirectory()
     properStructure1PathChild1 = path.join(properStructure1Path, "child1")
     properStructure1PathChild2 = path.join(properStructure1Path, "child2")
 
-    properStructure2Path = temp.mkdirSync()
+    properStructure2Path = temporaryDirectory()
     properStructure2PathChild1 = path.join(properStructure2Path, "child1")
     properStructure2PathChild2 = path.join(properStructure2Path, "child2")
   })
@@ -196,12 +192,12 @@ describe(async () => {
   let forceNonEmptyFolderPath: string
   let assertForceNonEmptyFolderPath: string
   beforeAll(() => {
-    emptyFolderPath = temp.mkdirSync()
-    nonEmptyFolderPath = temp.mkdirSync()
+    emptyFolderPath = temporaryDirectory()
+    nonEmptyFolderPath = temporaryDirectory()
     fse.mkdirSync(path.join(nonEmptyFolderPath, "child"))
-    forceNonEmptyFolderPath = temp.mkdirSync()
+    forceNonEmptyFolderPath = temporaryDirectory()
     fse.mkdirSync(path.join(forceNonEmptyFolderPath, "child"))
-    assertForceNonEmptyFolderPath = temp.mkdirSync()
+    assertForceNonEmptyFolderPath = temporaryDirectory()
     fse.mkdirSync(path.join(assertForceNonEmptyFolderPath, "child"))
   })
 
@@ -233,7 +229,7 @@ describe(async () => {
   let nonExistingFile: string
   let forceExistingFile: string
   beforeAll(() => {
-    filesFolderPath = temp.mkdirSync()
+    filesFolderPath = temporaryDirectory()
     existingFile = path.join(filesFolderPath, "file1.txt")
     fse.writeFileSync(existingFile, "test")
     nonExistingFile = path.join(filesFolderPath, "file2.txt")

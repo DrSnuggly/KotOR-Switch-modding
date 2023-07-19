@@ -2,7 +2,7 @@ import { Command } from "@commander-js/extra-typings"
 import fse from "fs-extra"
 import path from "node:path"
 import { describe } from "node:test"
-import temp from "temp"
+import { temporaryDirectory } from "tempy"
 
 import { FILE_SYSTEM_ERROR } from "../constants"
 import {
@@ -17,16 +17,11 @@ let tempFilePath: string
 let lines: string[]
 beforeAll(() => {
   command = new Command()
-  temp.track()
 
-  tempDirPath = temp.mkdirSync()
+  tempDirPath = temporaryDirectory()
   tempFilePath = path.join(tempDirPath, "config.json")
   lines = ["line1", "line2", "line3"]
   fse.writeFileSync(tempFilePath, lines.join("\n"))
-})
-// noinspection DuplicatedCode
-afterAll(() => {
-  temp.cleanupSync()
 })
 
 // while mock input is only really used in one test, use it for each test

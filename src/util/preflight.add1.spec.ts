@@ -2,7 +2,7 @@ import { Command } from "@commander-js/extra-typings"
 import fse from "fs-extra"
 import path from "node:path"
 import { describe } from "node:test"
-import temp from "temp"
+import { temporaryDirectory } from "tempy"
 
 import { FILE_SYSTEM_ERROR } from "../constants"
 import { configData } from "./config"
@@ -26,14 +26,10 @@ let command: Command<any[], any>
 let tempDirPath: string
 beforeAll(() => {
   command = new Command()
-  temp.track()
 
-  tempDirPath = temp.mkdirSync()
+  tempDirPath = temporaryDirectory()
   globalThis.configFile = path.join(tempDirPath, "config.json")
   fse.writeJSONSync(globalThis.configFile, relativeK1Config)
-})
-afterAll(() => {
-  temp.cleanupSync()
 })
 
 let mockExit: any
