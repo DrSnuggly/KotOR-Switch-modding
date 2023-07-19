@@ -11,7 +11,7 @@
     "assets/**/*"
   ],
   "scripts": {
-    "clean": "rimraf build dist",
+    "clean": "rimraf build coverage dist",
     "build": "npx tsc --project tsconfig.build.json",
     "build:watch": "npx tsc --project tsconfig.build.json --watch",
     "build-pkg:watch": "npx tsc-watch --project tsconfig.build.json --onSuccess \"npm run pkg\"",
