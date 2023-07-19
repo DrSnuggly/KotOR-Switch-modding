@@ -12,12 +12,13 @@ on:
 jobs:
   linux-build:
 
-    runs-on: ubuntu-latest
-
     strategy:
       matrix:
-        node-version: [18.x, 20.x]
+        os: [macos-latest, windows-latest, ubuntu-latest]
         # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
+        node-version: [18.x, 20.x]
+
+    runs-on: ${{ matrix.os }}
 
     steps:
     - uses: actions/checkout@v3
@@ -28,47 +29,9 @@ jobs:
         cache: 'npm'
     - run: npm ci
     - run: npm test
-
-    - name: Generate coverage badges
+    # only generate coverage badges on a single platform
+    - if: ${{ matrix.os == 'ubuntu-latest' && matrix.node-version == '18.x' }}
+      name: Generate coverage badges
       uses: jpb06/jest-badges-action@v1.9.16
       with:
         commit-message: "chore: update coverage badges"
-
-
-  windows-build:
-
-    runs-on: windows-latest
-
-    strategy:
-      matrix:
-        node-version: [18.x, 20.x]
-        # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
-
-    steps:
-    - uses: actions/checkout@v3
-    - name: Use Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v3
-      with:
-        node-version: ${{ matrix.node-version }}
-        cache: 'npm'
-    - run: npm ci
-    - run: npm test
-  
-  macos-build:
-
-    runs-on: macos-latest
-
-    strategy:
-      matrix:
-        node-version: [18.x, 20.x]
-        # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
-
-    steps:
-    - uses: actions/checkout@v3
-    - name: Use Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v3
-      with:
-        node-version: ${{ matrix.node-version }}
-        cache: 'npm'
-    - run: npm ci
-    - run: npm test
