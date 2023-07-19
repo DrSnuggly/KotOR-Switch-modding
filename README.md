@@ -2,6 +2,12 @@
 
 ![screenshot of TSLRCM working on the Nintendo Switch](./docs/switch-tslrcm-screenshot.jpg)
 
+![Branches](./badges/coverage-branches.svg)
+![Functions](./badges/coverage-functions.svg)
+![Lines](./badges/coverage-lines.svg)
+![Statements](./badges/coverage-statements.svg)
+![Jest coverage](./badges/coverage-jest%20coverage.svg)
+
 ## PLEASE NOTE, THIS IS STILL A WORK IN PROGRESS WITH SOME PARTS NOT FULLY FUNCTIONAL. DO NOT ASK FOR SUPPORT UNTIL AFTER THE FIRST RELEASE.
 
 This project is a group of tools to make modding the Nintendo Switch version of

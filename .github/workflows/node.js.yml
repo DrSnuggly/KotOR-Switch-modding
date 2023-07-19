@@ -29,6 +29,12 @@ jobs:
     - run: npm ci
     - run: npm test
 
+    - name: Generate coverage badges
+      uses: jpb06/jest-badges-action@v1.9.16
+      with:
+        commit-message: "chore: update coverage badges"
+
+
   windows-build:
 
     runs-on: windows-latest
