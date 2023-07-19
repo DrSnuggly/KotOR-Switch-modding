@@ -1,6 +1,6 @@
 # KotOR I & II Switch modding tools
 
-![screenshot of TSLRCM working on the Nintendo Switch](https://github.com/DrSnuggly/kotor-switch-modding/raw/main/docs/switch-tslrcm-screenshot.jpg)
+![screenshot of TSLRCM working on the Nintendo Switch](./docs/switch-tslrcm-screenshot.jpg)
 
 ## PLEASE NOTE, THIS IS STILL A WORK IN PROGRESS WITH SOME PARTS NOT FULLY FUNCTIONAL. DO NOT ASK FOR SUPPORT UNTIL AFTER THE FIRST RELEASE.
 
