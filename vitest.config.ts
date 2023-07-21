@@ -6,7 +6,8 @@ export default defineConfig({
     globals: true,
     clearMocks: true,
     coverage: {
-      reporter: ["json-summary", "json"],
+      reporter: ["json-summary", "json", "html"],
+      all: true,
     },
     include: ["src/**/*.spec.ts"],
   },
