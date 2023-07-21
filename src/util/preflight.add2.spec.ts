@@ -1,6 +1,5 @@
 import { Command } from "@commander-js/extra-typings"
 import path from "node:path"
-import { describe } from "node:test"
 import { temporaryDirectory } from "tempy"
 
 import { CONFIG_FILE_MISSING } from "../constants"
@@ -31,7 +30,7 @@ afterEach(() => {
 })
 
 // config file existence
-describe(async () => {
+describe("config file existence", async () => {
   test("fail to assert default config file exists", async () => {
     await assertConfigFileExists(command)
     expect(mockExit).toHaveBeenCalledWith(CONFIG_FILE_MISSING)

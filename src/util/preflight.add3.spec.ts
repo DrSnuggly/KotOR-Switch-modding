@@ -1,7 +1,6 @@
 import { Command } from "@commander-js/extra-typings"
 import fse from "fs-extra"
 import path from "node:path"
-import { describe } from "node:test"
 import { temporaryDirectory } from "tempy"
 
 import { ALREADY_FINALIZED, finalizedCanaryFileName } from "../constants"
@@ -43,7 +42,7 @@ afterEach(() => {
 })
 
 // directory state checks
-describe(async () => {
+describe("directory state checks", async () => {
   beforeAll(() => {
     const gameRootPath = path.join(tempDirPath, relativeK1Config.gameRoot)
     fse.mkdirSync(gameRootPath)

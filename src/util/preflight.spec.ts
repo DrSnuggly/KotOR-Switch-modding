@@ -1,7 +1,6 @@
 import { Command } from "@commander-js/extra-typings"
 import fse from "fs-extra"
 import path from "node:path"
-import { describe } from "node:test"
 import { temporaryDirectory } from "tempy"
 
 import {
@@ -58,7 +57,7 @@ afterEach(() => {
 })
 
 // config file existence
-describe(async () => {
+describe("config file existence", async () => {
   // assertion failure found in preflight.add1.spec.ts
   test("assert default config file exists", async () => {
     await assertConfigFileExists(command)
@@ -67,7 +66,7 @@ describe(async () => {
 })
 
 // languages
-describe(() => {
+describe("languages", () => {
   test.each([
     { language: "en", exits: false },
     { language: "ja", exits: false },
@@ -90,7 +89,7 @@ describe(() => {
 })
 
 // nesting checks
-describe(() => {
+describe("nesting checks", () => {
   let improperStructurePath: string
   let improperStructurePathChild1: string
   let improperStructurePathChild2: string
@@ -186,7 +185,7 @@ describe(() => {
 })
 
 // folder contents
-describe(async () => {
+describe("folder contents", async () => {
   let emptyFolderPath: string
   let nonEmptyFolderPath: string
   let forceNonEmptyFolderPath: string
@@ -223,7 +222,7 @@ describe(async () => {
 })
 
 // file existence
-describe(async () => {
+describe("file existence", async () => {
   let filesFolderPath: string
   let existingFile: string
   let nonExistingFile: string
@@ -252,7 +251,7 @@ describe(async () => {
 })
 
 // directory state checks
-describe(async () => {
+describe("directory state checks", async () => {
   beforeAll(() => {
     fse.mkdirSync(path.join(tempDirPath, relativeK1Config.gameRoot))
     fse.mkdirSync(path.join(tempDirPath, relativeK1Config.backupTo))

@@ -1,6 +1,5 @@
 import fse from "fs-extra"
 import path from "node:path"
-import { describe } from "node:test"
 import { temporaryDirectory } from "tempy"
 
 import {
@@ -24,7 +23,7 @@ const relativeK1Config: configData = {
 }
 
 // base config retrieval functions
-describe(() => {
+describe("base config retrieval", () => {
   let tempDirPath: string
   let configFile: string
   let configParams: getConfigParams
@@ -53,7 +52,7 @@ describe(() => {
 })
 
 // K1 default config with relative paths
-describe(() => {
+describe("K1 default config with relative paths", () => {
   let tempDirPath: string
 
   beforeAll(() => {
@@ -89,7 +88,7 @@ describe(() => {
 })
 
 // K1 config with relative paths
-describe(() => {
+describe("K1 config with relative paths", () => {
   let tempDirPath: string
   let configFile: string
   let configParams: getConfigParams
@@ -124,7 +123,7 @@ describe(() => {
 })
 
 // K1 config with absolute paths
-describe(() => {
+describe("K1 config with absolute paths", () => {
   let tempDirPath: string
   let configFile: string
   let configParams: getConfigParams
@@ -166,7 +165,7 @@ describe(() => {
 })
 
 // K1 config with mixed paths
-describe(() => {
+describe("K1 config with mixed paths", () => {
   let tempDirPath: string
   let configFile: string
   let configParams: getConfigParams

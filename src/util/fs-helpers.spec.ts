@@ -1,7 +1,6 @@
 import { Command } from "@commander-js/extra-typings"
 import fse from "fs-extra"
 import path from "node:path"
-import { describe } from "node:test"
 import { temporaryDirectory } from "tempy"
 
 import { FILE_SYSTEM_ERROR } from "../constants"
@@ -42,7 +41,7 @@ afterEach(() => {
 })
 
 // file system error wrapper
-describe(async () => {
+describe("file system error wrapper", async () => {
   test("fail to assert fs op fails without error", async () => {
     await tryFileSystemOperation(() => {
       fse.readJSONSync("wrong-file.json")
@@ -58,7 +57,7 @@ describe(async () => {
 })
 
 // file read stream
-describe(async () => {
+describe("file read stream", async () => {
   test("read all lines", async () => {
     const readLines: string[] = []
     await readFileLines(tempFilePath, (line: string) => {
