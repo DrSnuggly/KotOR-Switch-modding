@@ -43,7 +43,7 @@ describe("base config retrieval", () => {
 
   test("does existing config file exist", () => {
     fse.writeJSONSync(configFile, relativeK1Config)
-    expect(configFileExists()).toBeTruthy()
+    expect(configFileExists(configFile)).toBeTruthy()
   })
   test("get existing config", () => {
     fse.writeJSONSync(configFile, relativeK1Config)
