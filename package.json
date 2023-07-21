@@ -15,6 +15,7 @@
     "build": "npx tsc --project tsconfig.build.json",
     "build:watch": "npx tsc --project tsconfig.build.json --watch",
     "build-pkg:watch": "npx tsc-watch --project tsconfig.build.json --onSuccess \"npm run pkg\"",
+    "format": "prettier --write . '**/*.{js,ts,mts,mjs,json,yaml,md}'",
     "pkg": "npx pkg . --public-packages '*'",
     "test": "vitest --ui",
     "test:ci": "vitest run"
