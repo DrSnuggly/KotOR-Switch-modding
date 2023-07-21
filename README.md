@@ -2,6 +2,7 @@
 
 ![screenshot of TSLRCM working on the Nintendo Switch](./docs/switch-tslrcm-screenshot.jpg)
 
+[![Node.js CI](https://github.com/DrSnuggly/KotOR-Switch-modding/actions/workflows/node.js.yml/badge.svg)](https://github.com/DrSnuggly/KotOR-Switch-modding/actions/workflows/node.js.yml)
 ![Branches](./badges/coverage-branches.svg)
 ![Functions](./badges/coverage-functions.svg)
 ![Lines](./badges/coverage-lines.svg)
