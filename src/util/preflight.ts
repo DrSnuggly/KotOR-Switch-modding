@@ -97,7 +97,12 @@ export function assertIsNotNested(
 }
 
 export function isFolderEmpty(folderPath: string) {
-  return globby.sync(folderPath, { onlyFiles: false }).length === 0
+  // use replace to convert Windows-style paths to Unix-style, since globby
+  // doesn't properly support Windows-style paths
+  return (
+    globby.sync(folderPath.replace(/\\/g, "/"), { onlyFiles: false }).length ===
+    0
+  )
 }
 export async function assertFolderIsEmpty(
   command: Command<any[], any>,

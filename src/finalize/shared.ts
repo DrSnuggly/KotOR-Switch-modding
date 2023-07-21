@@ -196,7 +196,7 @@ export async function removeRedundantLooseTextures(
   await tryFileSystemOperation(async () => {
     // check override folder for .tpc files, which overrides everything else
     for await (const filePath of globby.stream(
-      path.join(overrideFolder, "*.tpc"),
+      path.join(overrideFolder, "*.tpc").replace(/\\/g, "/"),
       {
         onlyFiles: true,
         unique: true,
@@ -214,7 +214,7 @@ export async function removeRedundantLooseTextures(
       )
       // no await since we'll read the stream below
       const redundantTextures = globby.stream(
-        filePathWithoutExtension + ".{tga,dds,txi}",
+        filePathWithoutExtension.replace(/\\/g, "/") + ".{tga,dds,txi}",
         {
           onlyFiles: true,
           unique: true,
@@ -254,7 +254,7 @@ export async function moveExactROMFileMatches(
   )
 
   // read game root files by stream
-  const gameFiles = globby.stream(gameRoot, {
+  const gameFiles = globby.stream(gameRoot.replace(/\\/g, "/"), {
     onlyFiles: true,
     unique: true,
     caseSensitiveMatch: false,
@@ -344,7 +344,7 @@ export async function checkAndMoveTextures(
   // ideal. however, I'm not sure if deleting files from the previous step would
   // impact the stream, so I'm just going to not deal with that for now.
   const gameFiles = globby.stream(
-    path.join(overrideFolder, "*.{tga,dds,txi,tpc}"),
+    path.join(overrideFolder, "*.{tga,dds,txi,tpc}").replace(/\\/g, "/"),
     {
       onlyFiles: true,
       unique: true,
@@ -517,7 +517,7 @@ export async function moveOverrideFileType(
 
   await tryFileSystemOperation(() => {
     const overrideFolderFiles = globby.sync(
-      path.join(overrideFolder, `*.${fileType}`),
+      path.join(overrideFolder, `*.${fileType}`).replace(/\\/g, "/"),
       {
         onlyFiles: true,
         caseSensitiveMatch: false,
@@ -553,19 +553,25 @@ export async function cleanUpEmptyFolders(
   if (_firstIteration) process.stdout.write("Removing empty folders... ")
 
   let count = 0
-  const gameFiles = globby.stream(path.join(gameRoot, "*"), {
-    onlyDirectories: true,
-    unique: true,
-    caseSensitiveMatch: false,
-    // manually expand below
-    expandDirectories: false,
-  })
+  const gameFiles = globby.stream(
+    path.join(gameRoot, "*").replace(/\\/g, "/"),
+    {
+      onlyDirectories: true,
+      unique: true,
+      caseSensitiveMatch: false,
+      // manually expand below
+      expandDirectories: false,
+    }
+  )
 
   await tryFileSystemOperation(async () => {
     for await (const dirPath of gameFiles) {
-      let contents = globby.sync(path.join(dirPath as string, "*"), {
-        onlyFiles: false,
-      })
+      let contents = globby.sync(
+        path.join(dirPath as string, "*").replace(/\\/g, "/"),
+        {
+          onlyFiles: false,
+        }
+      )
 
       // recursively check empty folders
       if (contents.length > 0) {
@@ -574,9 +580,12 @@ export async function cleanUpEmptyFolders(
           _firstIteration: false,
         })
         // re-evaluate contents after recursive call
-        contents = globby.sync(path.join(dirPath as string, "*"), {
-          onlyFiles: false,
-        })
+        contents = globby.sync(
+          path.join(dirPath as string, "*").replace(/\\/g, "/"),
+          {
+            onlyFiles: false,
+          }
+        )
       }
 
       // if the directory is now empty, remove it
