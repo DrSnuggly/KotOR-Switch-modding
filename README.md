@@ -56,21 +56,22 @@ NOTE: It's **highly** recommended to read this entire section before starting.
   [Atmosphère](https://github.com/Atmosphere-NX/Atmosphere) custom firmware
   installed.
   - **NOTE**: other custom firmwares will likely work but are unsupported.
-- A copy of KotOR I or II already installed on the Nintendo Switch with all 
+- A copy of KotOR I or II already installed on the Nintendo Switch with all
   updates applied.
 - [nxdumptool](https://github.com/DarkMatterCore/nxdumptool) installed on the
   Nintendo Switch to extract some game files needed for some mods.
 - A way to interact with and transfer files to and from the Nintendo Switch.
   Examples:
   - [ftpd](https://github.com/mtheall/ftpd)
-  - Hekate's tool to mount the SD Card to a PC, under **Tools** | **USB Tools**
+  - Hekate's tool to mount the SD Card to a PC, under **Tools** | **USB Tools
+    **
     | **SD Card** (requires rebooting the Nintendo Switch into Hekate).
   - [NX-Shell](https://github.com/joel16/NX-Shell) (only for interacting with
     existing files)
 
 ### Pre-flight
 
-1. On your computer, download and extract the most recent release from 
+1. On your computer, download and extract the most recent release from
    GitHub for your computer's operating system.
 2. Open a terminal window and navigate to the extracted folder from step 1.
    - e.g. `cd "~/Downloads/kotor-switch-modding"`
@@ -83,13 +84,14 @@ NOTE: It's **highly** recommended to read this entire section before starting.
      ./ksm help init
      ```
 4. On the Nintendo Switch, do the following in the **nxdumptool** app:
-   - Navigate to **Dump installed SD card eMMC content** | the game you'd 
+   - Navigate to **Dump installed SD card eMMC content** | the game you'd
      like to mod | **RomFS options**.
    - Change the **Use update/DLC** option to the installed game update.
    - Select **Browse RomFS section**.
    - Dump the following files, depending on the game you're modding:
      - KotOR I:
-       - `dialog.tlk` (or equivalent for your language, e.g. `dialoges.tlk`)
+       - `dialog.tlk` (or equivalent for your language,
+         e.g. `dialoges.tlk`)
      - KotOR II:
        - `swplayer.ini`
        - `Localized/<language>/dialog.tlk`
@@ -103,6 +105,7 @@ NOTE: It's **highly** recommended to read this entire section before starting.
 ### Mod installation
 
 You can now start installing mods like usual. General notes:
+
 - The `game-root` folder is linked to the desktop by default. This is very
   useful for TSLPatcher that some mods use, which always defaults to the
   desktop.
@@ -111,13 +114,13 @@ You can now start installing mods like usual. General notes:
   about, but errors can occur due to missing files that the mod installer
   expects (known mods listed below). If this occurs:
   1. In the TSLPatcher window, make a note of the filepath associated with
-    the error (e.g. `lips/003EBO_loc.mod`.
+     the error (e.g. `lips/003EBO_loc.mod`.
   2. Dump the file from your Nintendo Switch.
-     - For KotOR II, you may need to look under `Localized/<language>` due to 
-       how the Nintendo Switch version of the game implemented other 
+     - For KotOR II, you may need to look under `Localized/<language>` due to
+       how the Nintendo Switch version of the game implemented other
        languages).
   3. Transfer the dumped file to your computer and place it in the location
-    that the mod installer expected in `game-root`.
+     that the mod installer expected in `game-root`.
   4. Re-run the TSLPatcher installer.
 
 ### Wrapping up
@@ -133,11 +136,15 @@ You can now start installing mods like usual. General notes:
      ./ksm finalize --restore-backup
      ```
    - **Make sure to pay attention to any warnings that appear.**
-     - The most common warning will be texture files that aren't in the `.tpc`
-       format when the Nintendo Switch version of the game already has the same
-       texture in that format. These pre-existing `.tpc` files on the Nintendo
+     - The most common warning will be texture files that aren't in
+       the `.tpc`
+       format when the Nintendo Switch version of the game already has the
+       same
+       texture in that format. These pre-existing `.tpc` files on the
+       Nintendo
        Switch will always override any `.tga` or `.dds` texture files — the
-       solution is to convert these files to `.tpc` where possible (e.g. using
+       solution is to convert these files to `.tpc` where possible (e.g.
+       using
        [tga2tpc 4.0.0](https://deadlystream.com/files/file/1152-tga2tpc/)).
 2. On the Nintendo Switch, delete the following folders, if applicable:
    - KotOR I: `/atmosphere/contents/0100854015868800`
@@ -160,9 +167,10 @@ You can now start installing mods like usual. General notes:
   - Button prompts are either missing or showing buttons for the incorrect
     platform
     - Fix: after installing this mod, use the `dialog.tlk` in the
-    `Fixed dialog for TSLRCM on Nintendo Switch.zip` attached to the latest
-    release — thanks,
-    [seriouslyunderappreciated](https://github.com/seriouslyunderappreciated)!
+      `Fixed dialog for TSLRCM on Nintendo Switch.zip` attached to the
+      latest
+      release — thanks,
+      [seriouslyunderappreciated](https://github.com/seriouslyunderappreciated)!
 
 There are likely more than what is listed here. Please don't hesitate to create
 an issue or pull request with any of these platform-specific issues you find.

@@ -1,4 +1,5 @@
 import { defineConfig } from "vitest/config"
+
 import { CustomSequencer } from "./test-sequencer"
 
 // noinspection JSUnusedGlobalSymbols

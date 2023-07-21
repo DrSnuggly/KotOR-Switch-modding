@@ -43,6 +43,7 @@ export type finalizeParams = {
 type preflightParams = {
   force: finalizeParams["force"]
 }
+
 export async function preflight(
   command: Command<any[], any>,
   { force }: preflightParams
@@ -92,6 +93,7 @@ export async function restore(command: Command<any[], any>) {
 type backUpParams = {
   forceBackup?: finalizeParams["forceBackup"]
 }
+
 export async function backUp(
   command: Command<any[], any>,
   { forceBackup }: backUpParams
@@ -140,6 +142,7 @@ export async function backUp(
 type finalizeGameRootParams = {
   gameRoot: configData["gameRoot"]
 }
+
 export async function markAsFinalized(
   command: Command<any[], any>,
   { gameRoot }: finalizeGameRootParams
@@ -156,6 +159,7 @@ export async function markAsFinalized(
 type removeKeyUnmodifiedFilesParams = {
   gameRoot: configData["gameRoot"]
 }
+
 export async function removeKeyUnmodifiedFiles(
   command: Command<any[], any>,
   { gameRoot }: removeKeyUnmodifiedFilesParams
@@ -164,7 +168,8 @@ export async function removeKeyUnmodifiedFiles(
   const game = getConfig().game
   const fileHashes = game === 1 ? k1FileHashes : k2FileHashes
 
-  // iterate through the target files and remove them if they exist and have the original checksum
+  // iterate through the target files and remove them if they exist and have
+  // the original checksum
   let count = 0
   await tryFileSystemOperation(async () => {
     for (const fileName of Object.keys(fileHashes)) {
@@ -186,6 +191,7 @@ export async function removeKeyUnmodifiedFiles(
 type removeRedundantLooseTexturesParams = {
   overrideFolder: string
 }
+
 export async function removeRedundantLooseTextures(
   command: Command<any[], any>,
   { overrideFolder }: removeRedundantLooseTexturesParams
@@ -238,6 +244,7 @@ type moveExactROMFileMatchesParams = {
   gameRoot: configData["gameRoot"]
   gameFilesListPath: string
 }
+
 export async function moveExactROMFileMatches(
   command: Command<any[], any>,
   { gameRoot, gameFilesListPath }: moveExactROMFileMatchesParams
@@ -323,6 +330,7 @@ type checkAndMoveTexturesProps = {
   gameFilesListPath: string
   overrideFolder: string
 }
+
 export async function checkAndMoveTextures(
   command: Command<any[], any>,
   { gameFilesListPath, overrideFolder, gameRoot }: checkAndMoveTexturesProps
@@ -508,6 +516,7 @@ type moveOverrideFileTypeParams = {
   targetSubFolder: string
   fileType: string
 }
+
 export async function moveOverrideFileType(
   command: Command<any[], any>,
   { overrideFolder, targetSubFolder, fileType }: moveOverrideFileTypeParams
@@ -546,6 +555,7 @@ type cleanUpEmptyFoldersParams = {
   gameRoot: configData["gameRoot"]
   _firstIteration?: boolean
 }
+
 export async function cleanUpEmptyFolders(
   command: Command<any[], any>,
   { gameRoot, _firstIteration = true }: cleanUpEmptyFoldersParams
@@ -607,6 +617,7 @@ type transformToAtmosphereFolderStructureParams = {
   gameRoot: configData["gameRoot"]
   outputTo: configData["outputTo"]
 }
+
 export async function transformToAtmosphereFolderStructure(
   command: Command<any[], any>,
   { gameRoot, outputTo }: transformToAtmosphereFolderStructureParams

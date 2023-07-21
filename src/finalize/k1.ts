@@ -84,6 +84,7 @@ export async function finalizeK1(
 type moveLocalizedDialogFileParams = {
   gameRoot: configData["gameRoot"]
 }
+
 export async function moveLocalizedFiles(
   command: Command<any[], any>,
   { gameRoot }: moveLocalizedDialogFileParams

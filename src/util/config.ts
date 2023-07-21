@@ -23,12 +23,14 @@ export type getConfigParams = {
   configFile: string
   force: boolean
 }
+
 function defaultConfigParams(): getConfigParams {
   return {
     configFile: globalThis.configFile,
     force: false,
   }
 }
+
 export function getConfig(
   { configFile, force }: getConfigParams = defaultConfigParams()
 ): configData {

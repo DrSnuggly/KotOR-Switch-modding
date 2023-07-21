@@ -80,6 +80,7 @@ type moveLocalizedFilesParams = {
   gameRoot: configData["gameRoot"]
   targetFolder: string
 }
+
 async function moveLocalizedFiles(
   command: Command<any[], any>,
   { targetFolder, gameRoot }: moveLocalizedFilesParams

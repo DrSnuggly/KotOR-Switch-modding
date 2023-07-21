@@ -62,6 +62,7 @@ export type NestingCheckInput = {
   value: string
   descriptor: string
 }
+
 export function isChild(
   parent: NestingCheckInput["value"],
   child: NestingCheckInput["value"]
@@ -71,6 +72,7 @@ export function isChild(
     ".."
   )
 }
+
 export function assertIsNotNested(
   command: Command<any[], any>,
   { value: first, descriptor: firstDescriptor }: NestingCheckInput,
@@ -104,6 +106,7 @@ export function isFolderEmpty(folderPath: string) {
     0
   )
 }
+
 export async function assertFolderIsEmpty(
   command: Command<any[], any>,
   folderPath: string,

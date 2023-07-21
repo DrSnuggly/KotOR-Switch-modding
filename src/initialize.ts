@@ -198,6 +198,7 @@ type initializeParams = {
   kotor2?: boolean
   language: string
 }
+
 async function initialize(params: initializeParams) {
   await preflight(params)
 
@@ -407,7 +408,8 @@ async function createGameTemplateFolders({
   )
   let count = 0
   await tryFileSystemOperation(async () => {
-    // don't use path.join() here since these will be bundled with the executable
+    // don't use path.join() here since these will be bundled with the
+    // executable
     const gameDirsFile = kotor1
       ? path.join(k1AssetsDir, "steam-folders.txt")
       : path.join(k2AssetsDir, "steam-folders.txt")
