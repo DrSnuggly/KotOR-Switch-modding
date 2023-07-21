@@ -23,21 +23,13 @@ beforeAll(() => {
   fse.writeFileSync(tempFilePath, lines.join("\n"))
 })
 
-// while mock input is only really used in one test, use it for each test
-// to avoid tests exiting early if an issue arises
-// noinspection DuplicatedCode
-let mockExit: any
-let mockStderr: any
-let mockConsoleError: any
-beforeEach(() => {
-  mockExit = jest.spyOn(process, "exit").mockImplementation()
-  mockStderr = jest.spyOn(process.stderr, "write").mockImplementation()
-  mockConsoleError = jest.spyOn(console, "error").mockImplementation()
+const mockExit = vi.spyOn(process, "exit").mockImplementation(() => {
+  return undefined as never
 })
-afterEach(() => {
-  mockExit.mockRestore()
-  mockStderr.mockRestore()
-  mockConsoleError.mockRestore()
+vi.spyOn(process.stderr, "write").mockImplementation(() => false)
+vi.spyOn(console, "error").mockImplementation(() => {})
+afterAll(() => {
+  vi.restoreAllMocks()
 })
 
 // file system error wrapper

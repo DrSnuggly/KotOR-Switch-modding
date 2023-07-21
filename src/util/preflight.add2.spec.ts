@@ -14,19 +14,13 @@ beforeAll(() => {
   globalThis.configFile = path.join(tempDirPath, "config.json")
 })
 
-// noinspection DuplicatedCode
-let mockExit: any
-let mockStderr: any
-let mockConsoleError: any
-beforeEach(() => {
-  mockExit = jest.spyOn(process, "exit").mockImplementation()
-  mockStderr = jest.spyOn(process.stderr, "write").mockImplementation()
-  mockConsoleError = jest.spyOn(console, "error").mockImplementation()
+const mockExit = vi.spyOn(process, "exit").mockImplementation(() => {
+  return undefined as never
 })
-afterEach(() => {
-  mockExit.mockRestore()
-  mockStderr.mockRestore()
-  mockConsoleError.mockRestore()
+vi.spyOn(process.stderr, "write").mockImplementation(() => false)
+vi.spyOn(console, "error").mockImplementation(() => {})
+afterAll(() => {
+  vi.restoreAllMocks()
 })
 
 // config file existence
