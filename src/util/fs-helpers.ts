@@ -5,7 +5,7 @@ import crypto from "node:crypto"
 import readline from "readline"
 import wrap from "word-wrap"
 
-import { FILE_SYSTEM_ERROR, wrapOptions } from "../constants"
+import { FILE_SYSTEM_ERROR, wrapOptions } from "~/constants"
 
 export async function tryFileSystemOperation(
   fn: Function,

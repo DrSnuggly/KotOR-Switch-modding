@@ -1,3 +1,4 @@
+import * as path from "node:path"
 import { defineConfig } from "vitest/config"
 
 import { CustomSequencer } from "./test-sequencer"
@@ -18,5 +19,11 @@ export default defineConfig({
     },
     setupFiles: ["vitest/setup"],
     include: ["src/**/*.spec.ts"],
+  },
+  resolve: {
+    alias: {
+      "~": path.resolve(__dirname, "./src"),
+      "!": path.resolve(__dirname, "./"),
+    },
   },
 })

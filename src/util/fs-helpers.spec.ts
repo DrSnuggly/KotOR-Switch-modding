@@ -2,8 +2,9 @@ import fse from "fs-extra"
 import path from "node:path"
 import { temporaryDirectory } from "tempy"
 
-import { command } from "../../vitest/constants"
-import { FILE_SYSTEM_ERROR } from "../constants"
+import { command } from "!/vitest/constants"
+import { FILE_SYSTEM_ERROR } from "~/constants"
+
 import {
   checksumFile,
   readFileLines,

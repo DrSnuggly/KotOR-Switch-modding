@@ -12,9 +12,8 @@
   ],
   "scripts": {
     "clean": "rimraf build coverage dist",
-    "build": "npx tsc --project tsconfig.build.json",
-    "build:watch": "npx tsc-watch --project tsconfig.build.json",
-    "build-pkg:watch": "npx tsc-watch --project tsconfig.build.json --onSuccess \"npm run pkg\"",
+    "build": "tspc --project tsconfig.build.json",
+    "build:watch": "tsc-watch --compiler ts-patch/compiler --project tsconfig.build.json",
     "format": "prettier --write . '**/*.{js,ts,mts,mjs,json,yaml,md}'",
     "pkg": "npx pkg . --public-packages '*'",
     "test": "vitest --ui",
@@ -60,8 +59,10 @@
     "rimraf": "^5.0.1",
     "tempy": "^3.1.0",
     "ts-node": "^10.9.1",
+    "ts-patch": "^3.0.2",
     "tsc-watch": "^6.0.4",
     "typescript": "^5.1.6",
+    "typescript-transform-paths": "^3.4.6",
     "vitest": "^0.33.0"
   }
 }

@@ -2,12 +2,13 @@ import fse from "fs-extra"
 import path from "node:path"
 import { temporaryDirectory } from "tempy"
 
-import { command, relativeK1Config } from "../../vitest/constants"
+import { command, relativeK1Config } from "!/vitest/constants"
 import {
   FILE_SYSTEM_ERROR,
   INVALID_INPUT,
   UNSUPPORTED_LANGUAGE,
-} from "../constants"
+} from "~/constants"
+
 import {
   assertBackupExists,
   assertConfigFileExists,

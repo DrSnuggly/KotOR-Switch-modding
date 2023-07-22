@@ -1,8 +1,9 @@
 import path from "node:path"
 import { temporaryDirectory } from "tempy"
 
-import { command } from "../../vitest/constants"
-import { CONFIG_FILE_MISSING } from "../constants"
+import { command } from "!/vitest/constants"
+import { CONFIG_FILE_MISSING } from "~/constants"
+
 import { assertConfigFileExists } from "./preflight"
 
 let tempDirPath: string

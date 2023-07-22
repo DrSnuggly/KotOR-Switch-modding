@@ -1,6 +1,5 @@
 import { Command } from "@commander-js/extra-typings"
-
-import { configData } from "../src/util/config"
+import { configData } from "~/util/config"
 
 export const relativeK1Config: configData = {
   game: 1,

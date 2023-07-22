@@ -1,7 +1,12 @@
 {
   "extends": "./tsconfig.json",
   "compilerOptions": {
-    "types": []
+    "types": [],
+    "plugins": [
+      {
+        "transform": "typescript-transform-paths"
+      }
+    ]
   },
   "exclude": ["**/*.spec.ts", "src/**/*.spec.ts", "*.ts", "*.mts", "vitest/"]
 }

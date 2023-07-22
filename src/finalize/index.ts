@@ -1,7 +1,8 @@
 import { Command, Option } from "@commander-js/extra-typings"
 
-import { getConfig } from "../util/config"
-import { assertConfigFileExists } from "../util/preflight"
+import { getConfig } from "~/util/config"
+import { assertConfigFileExists } from "~/util/preflight"
+
 import { finalizeK1 } from "./k1"
 import { finalizeK2 } from "./k2"
 

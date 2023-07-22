@@ -3,14 +3,15 @@ import chalk from "chalk"
 import fse from "fs-extra"
 import path from "node:path"
 
-import { UNSUPPORTED_LANGUAGE, k2AssetsDir } from "../constants"
+import { UNSUPPORTED_LANGUAGE, k2AssetsDir } from "~/constants"
 import {
   configData,
   getAbsoluteGameRoot,
   getAbsoluteOutputTo,
   getConfig,
-} from "../util/config"
-import { tryFileSystemOperation } from "../util/fs-helpers"
+} from "~/util/config"
+import { tryFileSystemOperation } from "~/util/fs-helpers"
+
 import {
   backUp,
   checkAndMoveTextures,

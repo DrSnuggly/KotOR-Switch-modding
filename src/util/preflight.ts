@@ -14,7 +14,8 @@ import {
   finalizedCanaryFileName,
   languageCodes,
   wrapOptions,
-} from "../constants"
+} from "~/constants"
+
 import {
   configFileExists,
   getAbsoluteBackupTo,

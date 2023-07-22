@@ -1,7 +1,7 @@
 import fse from "fs-extra"
 import path from "node:path"
 
-import { languageCodes } from "../constants"
+import { languageCodes } from "~/constants"
 
 export type configData = {
   game: 1 | 2

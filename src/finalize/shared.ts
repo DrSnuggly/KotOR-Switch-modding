@@ -14,22 +14,22 @@ import {
   k2FileHashes,
   k2TitleId,
   wrapOptions,
-} from "../constants"
+} from "~/constants"
 import {
   configData,
   getAbsoluteBackupTo,
   getAbsoluteGameRoot,
   getAbsoluteManualProcessingOutput,
   getConfig,
-} from "../util/config"
-import { checksumFile, tryFileSystemOperation } from "../util/fs-helpers"
+} from "~/util/config"
+import { checksumFile, tryFileSystemOperation } from "~/util/fs-helpers"
 import {
   assertBackupExists,
   assertConfigFileExists,
   assertFolderIsEmpty,
   assertGameRootExists,
   assertIsNotFinalized,
-} from "../util/preflight"
+} from "~/util/preflight"
 
 // shared
 export type finalizeParams = {

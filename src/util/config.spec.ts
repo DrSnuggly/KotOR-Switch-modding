@@ -2,7 +2,8 @@ import fse from "fs-extra"
 import path from "node:path"
 import { temporaryDirectory } from "tempy"
 
-import { relativeK1Config } from "../../vitest/constants"
+import { relativeK1Config } from "!/vitest/constants"
+
 import {
   configData,
   configFileExists,

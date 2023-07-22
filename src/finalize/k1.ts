@@ -2,14 +2,15 @@ import { Command } from "@commander-js/extra-typings"
 import fse from "fs-extra"
 import path from "node:path"
 
-import { k1AssetsDir } from "../constants"
+import { k1AssetsDir } from "~/constants"
 import {
   configData,
   getAbsoluteGameRoot,
   getAbsoluteOutputTo,
   getConfig,
-} from "../util/config"
-import { tryFileSystemOperation } from "../util/fs-helpers"
+} from "~/util/config"
+import { tryFileSystemOperation } from "~/util/fs-helpers"
+
 import {
   backUp,
   checkAndMoveTextures,
