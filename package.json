@@ -15,7 +15,16 @@
     "build": "tspc --project tsconfig.build.json",
     "build:watch": "tsc-watch --compiler ts-patch/compiler --project tsconfig.build.json",
     "format": "prettier --write . '**/*.{js,ts,mts,mjs,json,yaml,md}'",
-    "pkg": "npx pkg . --public-packages '*'",
+    "pkg": "pkg . --public-packages '*'",
+    "pkg:macos": "pkg . --public-packages '*' --targets node18-macos-arm64,node18-macos-x64",
+    "pkg:macos:arm64": "pkg . --public-packages '*' --targets node18-macos-arm64",
+    "pkg:macos:x64": "pkg . --public-packages '*' --targets node18-macos-x64",
+    "pkg:linux": "pkg . --public-packages '*' --targets node18-linux-arm64,node18-linux-x64",
+    "pkg:linux:arm64": "pkg . --public-packages '*' --targets node18-linux-arm64",
+    "pkg:linux:x64": "pkg . --public-packages '*' --targets node18-linux-x64",
+    "pkg:win": "pkg . --public-packages '*' --targets node18-win-arm64,node18-win-x64",
+    "pkg:win:arm64": "pkg . --public-packages '*' --targets node18-win-arm64",
+    "pkg:win:x64": "pkg . --public-packages '*' --targets node18-win-x64",
     "test": "vitest --ui",
     "test:ci": "vitest run"
   },
@@ -24,7 +33,12 @@
       "assets/**/*"
     ],
     "targets": [
-      "node18-macos-arm64"
+      "node18-macos-arm64",
+      "node18-macos-x64",
+      "node18-linux-arm64",
+      "node18-linux-x64",
+      "node18-win-arm64",
+      "node18-win-x64"
     ],
     "outputPath": "dist"
   },
