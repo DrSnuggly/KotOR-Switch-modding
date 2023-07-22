@@ -7,7 +7,7 @@
     "ksm": "build/main.js"
   },
   "files": [
-    "build/**/*.js",
+    "build/**/*",
     "assets/**/*"
   ],
   "scripts": {
