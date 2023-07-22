@@ -8,5 +8,6 @@
       }
     ]
   },
-  "exclude": ["**/*.spec.ts", "src/**/*.spec.ts", "*.ts", "*.mts", "vitest/"]
+  "include": ["src/**/*.ts"],
+  "exclude": ["src/**/*.spec.ts"]
 }
