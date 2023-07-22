@@ -13,6 +13,7 @@ export default defineConfig({
       sequencer: CustomSequencer,
     },
     coverage: {
+      provider: "v8",
       enabled: true,
       reporter: ["json-summary", "json", "html"],
       all: true,
