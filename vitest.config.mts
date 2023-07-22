@@ -16,6 +16,7 @@ export default defineConfig({
       reporter: ["json-summary", "json", "html"],
       all: true,
     },
+    setupFiles: ["vitest/setup"],
     include: ["src/**/*.spec.ts"],
   },
 })

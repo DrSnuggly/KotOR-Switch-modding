@@ -1,8 +1,8 @@
-import { Command } from "@commander-js/extra-typings"
 import fse from "fs-extra"
 import path from "node:path"
 import { temporaryDirectory } from "tempy"
 
+import { command } from "../../vitest/constants"
 import { FILE_SYSTEM_ERROR } from "../constants"
 import {
   checksumFile,
@@ -10,26 +10,13 @@ import {
   tryFileSystemOperation,
 } from "./fs-helpers"
 
-let command: Command<any[], any>
+const lines = ["line1", "line2", "line3"]
 let tempDirPath: string
 let tempFilePath: string
-let lines: string[]
 beforeAll(() => {
-  command = new Command()
-
   tempDirPath = temporaryDirectory()
   tempFilePath = path.join(tempDirPath, "config.json")
-  lines = ["line1", "line2", "line3"]
   fse.writeFileSync(tempFilePath, lines.join("\n"))
-})
-
-const mockExit = vi.spyOn(process, "exit").mockImplementation(() => {
-  return undefined as never
-})
-vi.spyOn(process.stderr, "write").mockImplementation(() => false)
-vi.spyOn(console, "error").mockImplementation(() => {})
-afterAll(() => {
-  vi.restoreAllMocks()
 })
 
 // file system error wrapper

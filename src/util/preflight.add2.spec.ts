@@ -1,26 +1,14 @@
-import { Command } from "@commander-js/extra-typings"
 import path from "node:path"
 import { temporaryDirectory } from "tempy"
 
+import { command } from "../../vitest/constants"
 import { CONFIG_FILE_MISSING } from "../constants"
 import { assertConfigFileExists } from "./preflight"
 
-let command: Command<any[], any>
 let tempDirPath: string
 beforeAll(() => {
-  command = new Command()
-
   tempDirPath = temporaryDirectory()
   globalThis.configFile = path.join(tempDirPath, "config.json")
-})
-
-const mockExit = vi.spyOn(process, "exit").mockImplementation(() => {
-  return undefined as never
-})
-vi.spyOn(process.stderr, "write").mockImplementation(() => false)
-vi.spyOn(console, "error").mockImplementation(() => {})
-afterAll(() => {
-  vi.restoreAllMocks()
 })
 
 // config file existence

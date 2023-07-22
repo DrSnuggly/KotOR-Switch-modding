@@ -10,6 +10,6 @@
     "moduleResolution": "node",
     "strictNullChecks": true,
     "isolatedModules": true,
-    "types": ["vitest/globals"]
+    "types": ["vitest/globals", "vitest/setup"]
   }
 }

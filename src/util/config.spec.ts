@@ -2,6 +2,7 @@ import fse from "fs-extra"
 import path from "node:path"
 import { temporaryDirectory } from "tempy"
 
+import { relativeK1Config } from "../../vitest/constants"
 import {
   configData,
   configFileExists,
@@ -12,15 +13,6 @@ import {
   getConfig,
   getConfigParams,
 } from "./config"
-
-const relativeK1Config: configData = {
-  game: 1,
-  languageCode: "en",
-  gameRoot: "game-root",
-  backupTo: "backup",
-  outputTo: "output",
-  manualProcessingOutput: "_NEEDS_PROCESSING",
-}
 
 // base config retrieval functions
 describe("base config retrieval", () => {
