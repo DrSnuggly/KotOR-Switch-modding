@@ -1,4 +1,7 @@
 {
   "extends": "./tsconfig.json",
-  "exclude": ["**/*.test.ts", "src/**/*.test.ts", "*.ts", "*.mts"]
+  "compilerOptions": {
+    "types": []
+  },
+  "exclude": ["**/*.spec.ts", "src/**/*.spec.ts", "*.ts", "*.mts", "vitest/"]
 }
