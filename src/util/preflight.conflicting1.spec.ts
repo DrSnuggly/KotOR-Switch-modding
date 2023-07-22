@@ -1,3 +1,4 @@
+// tests that would conflict with those in ./preflight.spec.ts
 import fse from "fs-extra"
 import path from "node:path"
 import { temporaryDirectory } from "tempy"

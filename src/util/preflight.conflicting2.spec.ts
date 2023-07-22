@@ -1,3 +1,4 @@
+// tests that would conflict with those in ./preflight.conflicting1.spec.ts
 import path from "node:path"
 import { temporaryDirectory } from "tempy"
 

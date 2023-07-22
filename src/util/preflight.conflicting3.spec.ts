@@ -1,9 +1,11 @@
+// tests that would conflict with those in ./preflight.conflicting2.spec.ts
 import fse from "fs-extra"
 import path from "node:path"
 import { temporaryDirectory } from "tempy"
 
-import { command, relativeK1Config } from "../../vitest/constants"
-import { ALREADY_FINALIZED, finalizedCanaryFileName } from "../constants"
+import { command, relativeK1Config } from "!/vitest/constants"
+import { ALREADY_FINALIZED, finalizedCanaryFileName } from "~/constants"
+
 import { assertIsNotFinalized } from "./preflight"
 
 let tempDirPath: string

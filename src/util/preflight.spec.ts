@@ -31,7 +31,7 @@ beforeAll(() => {
 
 // config file existence
 describe("config file existence", async () => {
-  // assertion failure found in preflight.add1.spec.ts
+  // assertion failure found in preflight.conflicting1.spec.ts
   test("assert default config file exists", async () => {
     await assertConfigFileExists(command)
     expect(mockExit).not.toHaveBeenCalled()
@@ -230,17 +230,17 @@ describe("directory state checks", async () => {
     fse.mkdirSync(path.join(tempDirPath, relativeK1Config.backupTo))
   })
 
-  // assertion failure found in preflight.add2.spec.ts
+  // assertion failure found in preflight.conflicting2.spec.ts
   test("assert game root exists", async () => {
     await assertGameRootExists(command)
     expect(mockExit).not.toHaveBeenCalled()
   })
-  // assertion failure found in preflight.add2.spec.ts
+  // assertion failure found in preflight.conflicting2.spec.ts
   test("assert backup folder exists", async () => {
     await assertBackupExists(command)
     expect(mockExit).not.toHaveBeenCalled()
   })
-  // assertion failure found in preflight.add3.spec.ts
+  // assertion failure found in preflight.conflicting3.spec.ts
   test("assert is not finalized", async () => {
     await assertIsNotFinalized(command)
     expect(mockExit).not.toHaveBeenCalled()

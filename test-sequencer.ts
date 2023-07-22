@@ -7,9 +7,9 @@ export class CustomSequencer extends BaseSequencer {
     // - util/config.spec.ts
     // - util/fs-helpers.spec.ts
     // - util/preflight.spec.ts
-    // - util/preflight.add1.spec.ts
-    // - util/preflight.add2.spec.ts
-    // - util/preflight.add3.spec.ts
+    // - util/preflight.conflicting1.spec.ts
+    // - util/preflight.conflicting2.spec.ts
+    // - util/preflight.conflicting3.spec.ts
     // - initialize.spec.ts
     // and ensure the following are run last:
     // - finalize/index.spec.ts
@@ -34,22 +34,22 @@ export class CustomSequencer extends BaseSequencer {
       if (b[1].endsWith("util/preflight.spec.ts")) {
         return 1
       }
-      if (a[1].endsWith("util/preflight.add1.spec.ts")) {
+      if (a[1].endsWith("util/preflight.conflicting1.spec.ts")) {
         return -1
       }
-      if (b[1].endsWith("util/preflight.add1.spec.ts")) {
+      if (b[1].endsWith("util/preflight.conflicting1.spec.ts")) {
         return 1
       }
-      if (a[1].endsWith("util/preflight.add2.spec.ts")) {
+      if (a[1].endsWith("util/preflight.conflicting2.spec.ts")) {
         return -1
       }
-      if (b[1].endsWith("util/preflight.add2.spec.ts")) {
+      if (b[1].endsWith("util/preflight.conflicting2.spec.ts")) {
         return 1
       }
-      if (a[1].endsWith("util/preflight.add3.spec.ts")) {
+      if (a[1].endsWith("util/preflight.conflicting3.spec.ts")) {
         return -1
       }
-      if (b[1].endsWith("util/preflight.add3.spec.ts")) {
+      if (b[1].endsWith("util/preflight.conflicting3.spec.ts")) {
         return 1
       }
       if (a[1].endsWith("initialize.spec.ts")) {
