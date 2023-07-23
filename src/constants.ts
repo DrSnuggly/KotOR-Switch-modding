@@ -13,14 +13,13 @@ process.stdout.on("resize", () => {
 /* c8 ignore end */
 
 // file hashes
-export type fileHashes = { [key: string]: string }
 // noinspection SpellCheckingInspection
-export const k1FileHashes: fileHashes = {
+export const k1FileHashes: { [key: string]: string } = {
   "dialog.tlk": "c83b5b5f5ea8941a767b6364049b2108ef576928",
   "swplayer.ini": "507105bc491dec3edf7374052b87fdabe44b0636",
 }
 // noinspection SpellCheckingInspection
-export const k2FileHashes: fileHashes = {
+export const k2FileHashes: { [key: string]: string } = {
   "dialog.tlk": "c83b5b5f5ea8941a767b6364049b2108ef576928",
   "swplayer.ini": "507105bc491dec3edf7374052b87fdabe44b0636",
 }
