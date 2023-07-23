@@ -3,10 +3,10 @@ import path from "node:path"
 import { temporaryDirectory } from "tempy"
 
 import { relativeK1Config } from "!/vitest/constants"
-import type { resolvableConfigData } from "!/vitest/utils"
+import type { ResolvableConfigData } from "!/vitest/utils"
 import { writeConfigFile } from "!/vitest/utils"
 
-import type { configData, getConfigParams } from "./config"
+import type { ConfigData, GetConfigParams } from "./config"
 import {
   configFileExists,
   getAbsoluteBackupTo,
@@ -20,7 +20,7 @@ import {
 describe("base config retrieval", () => {
   let tempDirPath: string
   let configFile: string
-  let configParams: getConfigParams
+  let configParams: GetConfigParams
 
   beforeAll(() => {
     tempDirPath = temporaryDirectory()
@@ -85,7 +85,7 @@ describe("K1 default config with relative paths", () => {
 describe("K1 config with relative paths", () => {
   let tempDirPath: string
   let configFile: string
-  let configParams: getConfigParams
+  let configParams: GetConfigParams
 
   beforeAll(() => {
     tempDirPath = temporaryDirectory()
@@ -120,8 +120,8 @@ describe("K1 config with relative paths", () => {
 describe("K1 config with absolute paths", () => {
   let tempDirPath: string
   let configFile: string
-  let configParams: getConfigParams
-  let absoluteK1Config: configData
+  let configParams: GetConfigParams
+  let absoluteK1Config: ConfigData
 
   beforeAll(() => {
     tempDirPath = temporaryDirectory()
@@ -162,15 +162,15 @@ describe("K1 config with absolute paths", () => {
 describe("K1 config with mixed paths", () => {
   let tempDirPath: string
   let configFile: string
-  let configParams: getConfigParams
-  const unresolvedMixedK1Config: resolvableConfigData = {
+  let configParams: GetConfigParams
+  const unresolvedMixedK1Config: ResolvableConfigData = {
     ...relativeK1Config,
     gameRoot: (tempDirPath: string) =>
       path.join(tempDirPath, relativeK1Config.gameRoot),
     manualProcessingOutput: (tempDirPath: string) =>
       path.join(tempDirPath, relativeK1Config.manualProcessingOutput),
   }
-  let mixedK1Config: configData
+  let mixedK1Config: ConfigData
 
   beforeAll(() => {
     ;({ configFile, resolvedConfig: mixedK1Config } = writeConfigFile(

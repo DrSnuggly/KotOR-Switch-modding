@@ -4,7 +4,7 @@ import path from "node:path"
 
 import { UNSUPPORTED_LANGUAGE, k2AssetsDir } from "~/constants"
 import type { FinalizeCommandResult } from "~/finalize/index"
-import type { configData } from "~/util/config"
+import type { ConfigData } from "~/util/config"
 import {
   getAbsoluteGameRoot,
   getAbsoluteOutputTo,
@@ -12,7 +12,7 @@ import {
 } from "~/util/config"
 import { tryFileSystemOperation } from "~/util/fs-helpers"
 
-import type { finalizeParams } from "./shared"
+import type { FinalizeParams } from "./shared"
 import {
   backUp,
   checkAndMoveTextures,
@@ -29,7 +29,7 @@ import {
 
 export async function finalizeK2(
   command: FinalizeCommandResult,
-  { force, backup, forceBackup, restoreBackup }: finalizeParams
+  { force, backup, forceBackup, restoreBackup }: FinalizeParams
 ) {
   // early exit if the user is trying to restore from a backup
   if (restoreBackup) {
@@ -77,14 +77,13 @@ export async function finalizeK2(
 }
 
 // move localized files
-type moveLocalizedFilesParams = {
-  gameRoot: configData["gameRoot"]
+type MoveLocalizedFilesParams = Pick<ConfigData, "gameRoot"> & {
   targetFolder: string
 }
 
 async function moveLocalizedFiles(
   command: FinalizeCommandResult,
-  { targetFolder, gameRoot }: moveLocalizedFilesParams
+  { targetFolder, gameRoot }: MoveLocalizedFilesParams
 ) {
   process.stdout.write(`Moving '${targetFolder}' localized contents... `)
 

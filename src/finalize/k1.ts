@@ -3,7 +3,7 @@ import path from "node:path"
 
 import { k1AssetsDir } from "~/constants"
 import type { FinalizeCommandResult } from "~/finalize/index"
-import type { configData } from "~/util/config"
+import type { ConfigData } from "~/util/config"
 import {
   getAbsoluteGameRoot,
   getAbsoluteOutputTo,
@@ -11,7 +11,7 @@ import {
 } from "~/util/config"
 import { tryFileSystemOperation } from "~/util/fs-helpers"
 
-import type { finalizeParams } from "./shared"
+import type { FinalizeParams } from "./shared"
 import {
   backUp,
   checkAndMoveTextures,
@@ -28,7 +28,7 @@ import {
 
 export async function finalizeK1(
   command: FinalizeCommandResult,
-  { force, backup, forceBackup, restoreBackup }: finalizeParams
+  { force, backup, forceBackup, restoreBackup }: FinalizeParams
 ) {
   if (restoreBackup) {
     return restore(command)
@@ -82,13 +82,11 @@ export async function finalizeK1(
   await transformToAtmosphereFolderStructure(command, { gameRoot, outputTo })
 }
 
-type moveLocalizedDialogFileParams = {
-  gameRoot: configData["gameRoot"]
-}
+type MoveLocalizedDialogFileParams = Pick<ConfigData, "gameRoot">
 
 export async function moveLocalizedFiles(
   command: FinalizeCommandResult,
-  { gameRoot }: moveLocalizedDialogFileParams
+  { gameRoot }: MoveLocalizedDialogFileParams
 ) {
   process.stdout.write("Moving localized files...")
   let count = 0

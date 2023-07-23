@@ -1,8 +1,8 @@
 import { Command } from "@commander-js/extra-typings"
 
-import { configData } from "~/util/config"
+import type { ConfigData } from "~/util/config"
 
-export const relativeK1Config: configData = {
+export const relativeK1Config: ConfigData = {
   game: 1,
   languageCode: "en",
   gameRoot: "game-root",
@@ -10,7 +10,7 @@ export const relativeK1Config: configData = {
   outputTo: "output",
   manualProcessingOutput: "_NEEDS_PROCESSING",
 }
-export const relativeK2Config: configData = {
+export const relativeK2Config: ConfigData = {
   ...relativeK1Config,
   game: 2,
 }

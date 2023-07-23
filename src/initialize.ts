@@ -12,7 +12,7 @@ import {
   languageCodes,
   wrapOptions,
 } from "./constants"
-import type { configData } from "./util/config"
+import type { ConfigData } from "./util/config"
 import { readFileLines, tryFileSystemOperation } from "./util/fs-helpers"
 import type { NestingCheckInput } from "./util/preflight"
 import {
@@ -24,7 +24,7 @@ import {
 
 const gameRootSiblingPlaceholder = "(sibling of '-c, --config-file')"
 
-export type InitializeCommandResult = Command<[], initializeParams>
+export type InitializeCommandResult = Command<[], InitializeParams>
 export const initializeCommand: InitializeCommandResult = new Command()
   .name("init")
   .summary("initialize the game root structure that many mods expect")
@@ -183,7 +183,7 @@ export const initializeCommand: InitializeCommandResult = new Command()
   })
 
 // main function
-type initializeParams = {
+type InitializeParams = {
   gameRoot: string
   backupTo: string
   outputTo: string
@@ -200,7 +200,7 @@ type initializeParams = {
   language: string
 }
 
-async function initialize(params: initializeParams) {
+async function initialize(params: InitializeParams) {
   await preflight(params)
 
   await createConfigFile(params)
@@ -210,7 +210,7 @@ async function initialize(params: initializeParams) {
 }
 
 // preflight checks
-async function preflight(params: initializeParams) {
+async function preflight(params: InitializeParams) {
   process.stdout.write("Running pre-flight checks... ")
 
   assertLanguageIsSupported(initializeCommand, params.language)
@@ -226,7 +226,7 @@ export function preflightNesting({
   gameRoot,
   backupTo,
   manualProcessingOutput,
-}: initializeParams) {
+}: InitializeParams) {
   // ensure folders are not nested
   const configNesting: NestingCheckInput = {
     // use dirname to get the parent folder of the config file
@@ -283,7 +283,7 @@ async function preflightFolderStructure({
   forceOutput,
   forceManualProcessingOutput,
   forceSymlink,
-}: initializeParams) {
+}: InitializeParams) {
   // ensure that the file system is in the correct state
   await tryFileSystemOperation(async () => {
     // files
@@ -317,10 +317,10 @@ async function createConfigFile({
   manualProcessingOutput,
   language,
   kotor1,
-}: initializeParams) {
+}: InitializeParams) {
   process.stdout.write(`Creating config file at '${globalThis.configFile}'... `)
   // create config outside of try block, so it can be used later
-  const config: configData = {
+  const config: ConfigData = {
     // can just test kotor1 since we confirmed at least one was provided above
     game: kotor1 ? 1 : 2,
     // just use gameRoot (no directory) since they are relative to the
@@ -344,7 +344,7 @@ async function createConfigFile({
 }
 
 // create game root
-async function createGameRoot({ gameRoot }: initializeParams) {
+async function createGameRoot({ gameRoot }: InitializeParams) {
   process.stdout.write(`Creating game root folder at '${gameRoot}'... `)
   let wasWarned = false
 
@@ -400,7 +400,7 @@ async function createGameRoot({ gameRoot }: initializeParams) {
 async function createGameTemplateFolders({
   kotor1,
   gameRoot,
-}: initializeParams) {
+}: InitializeParams) {
   // start game-specific directory creation
   process.stdout.write(
     `Creating game root folder structure from KotOR ${
@@ -427,7 +427,7 @@ async function createGameTemplateFolders({
 }
 
 // create symlink
-async function createSymlink({ symlinkPath, gameRoot }: initializeParams) {
+async function createSymlink({ symlinkPath, gameRoot }: InitializeParams) {
   if (symlinkPath) {
     process.stdout.write(
       `Creating desktop symlink '${path.basename(symlinkPath)}'... `

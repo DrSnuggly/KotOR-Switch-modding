@@ -3,7 +3,7 @@ import path from "node:path"
 
 import type { languageCodes } from "~/constants"
 
-export type configData = {
+export type ConfigData = {
   game: 1 | 2
   languageCode: (typeof languageCodes)[number]
   gameRoot: string
@@ -18,13 +18,13 @@ export function configFileExists(configFile = globalThis.configFile) {
 }
 
 // cache the results of reading the config file
-let config: configData
-export type getConfigParams = {
+let config: ConfigData
+export type GetConfigParams = {
   configFile: string
   force: boolean
 }
 
-function defaultConfigParams(): getConfigParams {
+function defaultConfigParams(): GetConfigParams {
   return {
     configFile: globalThis.configFile,
     force: false,
@@ -32,10 +32,10 @@ function defaultConfigParams(): getConfigParams {
 }
 
 export function getConfig(
-  { configFile, force }: getConfigParams = defaultConfigParams()
-): configData {
+  { configFile, force }: GetConfigParams = defaultConfigParams()
+): ConfigData {
   const getConfig = () =>
-    fse.readJSONSync(configFile, { encoding: "utf-8" }) as configData
+    fse.readJSONSync(configFile, { encoding: "utf-8" }) as ConfigData
 
   // do not set config data if forced
   if (force) {

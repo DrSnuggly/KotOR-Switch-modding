@@ -15,7 +15,7 @@ import {
   wrapOptions,
 } from "~/constants"
 import type { FinalizeCommandResult } from "~/finalize/index"
-import type { configData } from "~/util/config"
+import type { ConfigData } from "~/util/config"
 import {
   getAbsoluteBackupTo,
   getAbsoluteGameRoot,
@@ -32,7 +32,7 @@ import {
 } from "~/util/preflight"
 
 // shared
-export type finalizeParams = {
+export type FinalizeParams = {
   force: boolean
   backup: boolean
   forceBackup?: boolean
@@ -40,13 +40,13 @@ export type finalizeParams = {
 }
 
 // preflight
-type preflightParams = {
-  force: finalizeParams["force"]
+type PreflightParams = {
+  force: FinalizeParams["force"]
 }
 
 export async function preflight(
   command: FinalizeCommandResult,
-  { force }: preflightParams
+  { force }: PreflightParams
 ) {
   process.stdout.write("Running pre-flight checks... ")
 
@@ -90,13 +90,13 @@ export async function restore(command: FinalizeCommandResult) {
 }
 
 // backup
-type backUpParams = {
-  forceBackup?: finalizeParams["forceBackup"]
+type BackUpParams = {
+  forceBackup?: FinalizeParams["forceBackup"]
 }
 
 export async function backUp(
   command: FinalizeCommandResult,
-  { forceBackup }: backUpParams
+  { forceBackup }: BackUpParams
 ) {
   // validation
   await assertConfigFileExists(command)
@@ -139,13 +139,11 @@ export async function backUp(
 }
 
 // finalize
-type finalizeGameRootParams = {
-  gameRoot: configData["gameRoot"]
-}
+type FinalizeGameRootParams = Pick<ConfigData, "gameRoot">
 
 export async function markAsFinalized(
   command: FinalizeCommandResult,
-  { gameRoot }: finalizeGameRootParams
+  { gameRoot }: FinalizeGameRootParams
 ) {
   await tryFileSystemOperation(() => {
     fse.writeFileSync(
@@ -156,13 +154,11 @@ export async function markAsFinalized(
 }
 
 // remove key unmodified files
-type removeKeyUnmodifiedFilesParams = {
-  gameRoot: configData["gameRoot"]
-}
+type RemoveKeyUnmodifiedFilesParams = Pick<ConfigData, "gameRoot">
 
 export async function removeKeyUnmodifiedFiles(
   command: FinalizeCommandResult,
-  { gameRoot }: removeKeyUnmodifiedFilesParams
+  { gameRoot }: RemoveKeyUnmodifiedFilesParams
 ) {
   process.stdout.write("Removing any key unmodified files... ")
   const game = getConfig().game
@@ -188,13 +184,13 @@ export async function removeKeyUnmodifiedFiles(
 }
 
 // remove redundant loose textures
-type removeRedundantLooseTexturesParams = {
+type RemoveRedundantLooseTexturesParams = {
   overrideFolder: string
 }
 
 export async function removeRedundantLooseTextures(
   command: FinalizeCommandResult,
-  { overrideFolder }: removeRedundantLooseTexturesParams
+  { overrideFolder }: RemoveRedundantLooseTexturesParams
 ) {
   process.stdout.write("Removing redundant loose textures... ")
   let count = 0
@@ -240,14 +236,13 @@ export async function removeRedundantLooseTextures(
 }
 
 // move exact ROM file matches
-type moveExactROMFileMatchesParams = {
-  gameRoot: configData["gameRoot"]
+type MoveExactROMFileMatchesParams = Pick<ConfigData, "gameRoot"> & {
   gameFilesListPath: string
 }
 
 export async function moveExactROMFileMatches(
   command: FinalizeCommandResult,
-  { gameRoot, gameFilesListPath }: moveExactROMFileMatchesParams
+  { gameRoot, gameFilesListPath }: MoveExactROMFileMatchesParams
 ) {
   const statusBase = "Moving files that match existing game files"
   let found = 0
@@ -323,15 +318,14 @@ export async function moveExactROMFileMatches(
 }
 
 // move non-matched textures
-type checkAndMoveTexturesProps = {
-  gameRoot: configData["gameRoot"]
+type CheckAndMoveTexturesProps = Pick<ConfigData, "gameRoot"> & {
   gameFilesListPath: string
   overrideFolder: string
 }
 
 export async function checkAndMoveTextures(
   command: FinalizeCommandResult,
-  { gameFilesListPath, overrideFolder, gameRoot }: checkAndMoveTexturesProps
+  { gameFilesListPath, overrideFolder, gameRoot }: CheckAndMoveTexturesProps
 ) {
   const statusBase = "Moving non-matched texture overrides"
   let found = 0
@@ -509,7 +503,7 @@ export async function checkAndMoveTextures(
 }
 
 // move file types to folder
-type moveOverrideFileTypeParams = {
+type MoveOverrideFileTypeParams = {
   overrideFolder: string
   targetSubFolder: string
   fileType: string
@@ -517,7 +511,7 @@ type moveOverrideFileTypeParams = {
 
 export async function moveOverrideFileType(
   command: FinalizeCommandResult,
-  { overrideFolder, targetSubFolder, fileType }: moveOverrideFileTypeParams
+  { overrideFolder, targetSubFolder, fileType }: MoveOverrideFileTypeParams
 ) {
   process.stdout.write(`Moving '.${fileType}' override files... `)
   const overrideTexturesDir = path.join(overrideFolder, "textures")
@@ -549,14 +543,13 @@ export async function moveOverrideFileType(
 }
 
 // clean up empty folders
-type cleanUpEmptyFoldersParams = {
-  gameRoot: configData["gameRoot"]
+type CleanUpEmptyFoldersParams = Pick<ConfigData, "gameRoot"> & {
   _firstIteration?: boolean
 }
 
 export async function cleanUpEmptyFolders(
   command: FinalizeCommandResult,
-  { gameRoot, _firstIteration = true }: cleanUpEmptyFoldersParams
+  { gameRoot, _firstIteration = true }: CleanUpEmptyFoldersParams
 ) {
   if (_firstIteration) process.stdout.write("Removing empty folders... ")
 
@@ -611,14 +604,14 @@ export async function cleanUpEmptyFolders(
 }
 
 // transform to Atmosphere folder structure
-type transformToAtmosphereFolderStructureParams = {
-  gameRoot: configData["gameRoot"]
-  outputTo: configData["outputTo"]
-}
+type TransformToAtmosphereFolderStructureParams = Pick<
+  ConfigData,
+  "gameRoot" | "outputTo"
+>
 
 export async function transformToAtmosphereFolderStructure(
   command: FinalizeCommandResult,
-  { gameRoot, outputTo }: transformToAtmosphereFolderStructureParams
+  { gameRoot, outputTo }: TransformToAtmosphereFolderStructureParams
 ) {
   process.stdout.write("Transforming to Atmosphere folder structure... ")
 
