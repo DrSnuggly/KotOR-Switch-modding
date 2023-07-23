@@ -1,4 +1,5 @@
 import { Command } from "@commander-js/extra-typings"
+
 import { configData } from "~/util/config"
 
 export const relativeK1Config: configData = {
