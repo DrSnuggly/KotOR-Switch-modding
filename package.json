@@ -2,6 +2,7 @@
   "name": "kotor-switch-modding",
   "version": "3.0.0",
   "description": "Tools to help make modding Star Wars: Knights of the Old Republic I & II easier for the Nintendo Switch.",
+  "sideEffects": false,
   "main": "build/main.js",
   "bin": {
     "ksm": "build/main.js"
@@ -14,7 +15,7 @@
     "clean": "rimraf build coverage dist",
     "build": "tspc --project tsconfig.build.json",
     "build:watch": "tsc-watch --compiler ts-patch/compiler --project tsconfig.build.json",
-    "format": "prettier --write . '**/*.{js,ts,mts,mjs,json,yaml,md}'",
+    "format": "prettier --write . '**/*.{js,ts,mts,mjs,cjs,json,yaml,md}'",
     "pkg": "pkg . --public-packages '*'",
     "pkg:macos": "pkg . --public-packages '*' --targets node18-macos-arm64,node18-macos-x64",
     "pkg:macos:arm64": "pkg . --public-packages '*' --targets node18-macos-arm64",

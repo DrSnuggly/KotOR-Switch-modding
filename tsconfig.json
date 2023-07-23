@@ -2,7 +2,7 @@
   "compilerOptions": {
     "outDir": "build",
     "strict": true,
-    "target": "es6",
+    "target": "es2019",
     "module": "commonjs",
     "sourceMap": true,
     "resolveJsonModule": true,
@@ -10,6 +10,7 @@
     "moduleResolution": "node",
     "strictNullChecks": true,
     "isolatedModules": true,
+    "forceConsistentCasingInFileNames": true,
     "types": ["vitest/globals", "vitest/setup"],
     "paths": {
       "~/*": ["./src/*"],
