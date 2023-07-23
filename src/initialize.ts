@@ -12,10 +12,10 @@ import {
   languageCodes,
   wrapOptions,
 } from "./constants"
-import { configData } from "./util/config"
+import type { configData } from "./util/config"
 import { readFileLines, tryFileSystemOperation } from "./util/fs-helpers"
+import type { NestingCheckInput } from "./util/preflight"
 import {
-  NestingCheckInput,
   assertFileDoesNotExist,
   assertFolderIsEmpty,
   assertIsNotNested,
@@ -24,7 +24,8 @@ import {
 
 const gameRootSiblingPlaceholder = "(sibling of '-c, --config-file')"
 
-export const initializeCommand = new Command()
+export type InitializeCommandResult = Command<[], initializeParams>
+export const initializeCommand: InitializeCommandResult = new Command()
   .name("init")
   .summary("initialize the game root structure that many mods expect")
   .description(
@@ -213,14 +214,14 @@ async function preflight(params: initializeParams) {
   process.stdout.write("Running pre-flight checks... ")
 
   assertLanguageIsSupported(initializeCommand, params.language)
-  await preflightNesting(params)
+  preflightNesting(params)
   await preflightFolderStructure(params)
 
   console.log(chalk.green("done") + ".\n")
 }
 
 // check if the nesting of the folders is valid
-async function preflightNesting({
+export function preflightNesting({
   outputTo,
   gameRoot,
   backupTo,

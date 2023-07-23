@@ -1,4 +1,3 @@
-import { Command } from "@commander-js/extra-typings"
 import chalk from "chalk"
 import fse from "fs-extra"
 import globby from "globby"
@@ -15,8 +14,9 @@ import {
   k2TitleId,
   wrapOptions,
 } from "~/constants"
+import type { FinalizeCommandResult } from "~/finalize/index"
+import type { configData } from "~/util/config"
 import {
-  configData,
   getAbsoluteBackupTo,
   getAbsoluteGameRoot,
   getAbsoluteManualProcessingOutput,
@@ -45,7 +45,7 @@ type preflightParams = {
 }
 
 export async function preflight(
-  command: Command<any[], any>,
+  command: FinalizeCommandResult,
   { force }: preflightParams
 ) {
   process.stdout.write("Running pre-flight checks... ")
@@ -62,7 +62,7 @@ export async function preflight(
 }
 
 // restore
-export async function restore(command: Command<any[], any>) {
+export async function restore(command: FinalizeCommandResult) {
   // validation
   process.stdout.write("Running pre-flight checks... ")
   await assertConfigFileExists(command)
@@ -95,7 +95,7 @@ type backUpParams = {
 }
 
 export async function backUp(
-  command: Command<any[], any>,
+  command: FinalizeCommandResult,
   { forceBackup }: backUpParams
 ) {
   // validation
@@ -109,7 +109,7 @@ export async function backUp(
   process.stdout.write(`Backing up game root folder to '${backupTo}'... `)
 
   await tryFileSystemOperation(() => {
-    let directoryHasContents =
+    const directoryHasContents =
       fse.existsSync(backupTo) && fse.readdirSync(backupTo).length > 0
     // check if the backup directory already exists
     if (forceBackup && directoryHasContents) {
@@ -144,7 +144,7 @@ type finalizeGameRootParams = {
 }
 
 export async function markAsFinalized(
-  command: Command<any[], any>,
+  command: FinalizeCommandResult,
   { gameRoot }: finalizeGameRootParams
 ) {
   await tryFileSystemOperation(() => {
@@ -161,7 +161,7 @@ type removeKeyUnmodifiedFilesParams = {
 }
 
 export async function removeKeyUnmodifiedFiles(
-  command: Command<any[], any>,
+  command: FinalizeCommandResult,
   { gameRoot }: removeKeyUnmodifiedFilesParams
 ) {
   process.stdout.write("Removing any key unmodified files... ")
@@ -193,7 +193,7 @@ type removeRedundantLooseTexturesParams = {
 }
 
 export async function removeRedundantLooseTextures(
-  command: Command<any[], any>,
+  command: FinalizeCommandResult,
   { overrideFolder }: removeRedundantLooseTexturesParams
 ) {
   process.stdout.write("Removing redundant loose textures... ")
@@ -246,7 +246,7 @@ type moveExactROMFileMatchesParams = {
 }
 
 export async function moveExactROMFileMatches(
-  command: Command<any[], any>,
+  command: FinalizeCommandResult,
   { gameRoot, gameFilesListPath }: moveExactROMFileMatchesParams
 ) {
   const statusBase = "Moving files that match existing game files"
@@ -275,7 +275,7 @@ export async function moveExactROMFileMatches(
     const fileName = path.basename(filePath as string)
     const unRootedFilePath = (filePath as string).replace(gameRootRegex, "")
 
-    await tryFileSystemOperation(async () => {
+    await tryFileSystemOperation(() => {
       // load switch files (new-line delimited) into memory
       const gameFilesList = fse
         .readFileSync(gameFilesListPath, "utf8")
@@ -288,9 +288,7 @@ export async function moveExactROMFileMatches(
         // substrings of other file names
         const lineRegex = new RegExp("/" + fileName + "$", "i")
         if (line.match(lineRegex)) {
-          if (
-            (unRootedFilePath as string).toLowerCase() === line.toLowerCase()
-          ) {
+          if (unRootedFilePath.toLowerCase() === line.toLowerCase()) {
             skipped++
           } else {
             // create target directory if it doesn't exist
@@ -332,7 +330,7 @@ type checkAndMoveTexturesProps = {
 }
 
 export async function checkAndMoveTextures(
-  command: Command<any[], any>,
+  command: FinalizeCommandResult,
   { gameFilesListPath, overrideFolder, gameRoot }: checkAndMoveTexturesProps
 ) {
   const statusBase = "Moving non-matched texture overrides"
@@ -518,7 +516,7 @@ type moveOverrideFileTypeParams = {
 }
 
 export async function moveOverrideFileType(
-  command: Command<any[], any>,
+  command: FinalizeCommandResult,
   { overrideFolder, targetSubFolder, fileType }: moveOverrideFileTypeParams
 ) {
   process.stdout.write(`Moving '.${fileType}' override files... `)
@@ -557,7 +555,7 @@ type cleanUpEmptyFoldersParams = {
 }
 
 export async function cleanUpEmptyFolders(
-  command: Command<any[], any>,
+  command: FinalizeCommandResult,
   { gameRoot, _firstIteration = true }: cleanUpEmptyFoldersParams
 ) {
   if (_firstIteration) process.stdout.write("Removing empty folders... ")
@@ -619,7 +617,7 @@ type transformToAtmosphereFolderStructureParams = {
 }
 
 export async function transformToAtmosphereFolderStructure(
-  command: Command<any[], any>,
+  command: FinalizeCommandResult,
   { gameRoot, outputTo }: transformToAtmosphereFolderStructureParams
 ) {
   process.stdout.write("Transforming to Atmosphere folder structure... ")

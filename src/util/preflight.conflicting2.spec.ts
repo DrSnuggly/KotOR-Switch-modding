@@ -14,7 +14,7 @@ beforeAll(() => {
 })
 
 // config file existence
-describe("config file existence", async () => {
+describe("config file existence", () => {
   test("fail to assert default config file exists", async () => {
     await assertConfigFileExists(command)
     expect(mockExit).toHaveBeenCalledWith(CONFIG_FILE_MISSING)

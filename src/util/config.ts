@@ -1,7 +1,7 @@
 import fse from "fs-extra"
 import path from "node:path"
 
-import { languageCodes } from "~/constants"
+import type { languageCodes } from "~/constants"
 
 export type configData = {
   game: 1 | 2
@@ -34,7 +34,8 @@ function defaultConfigParams(): getConfigParams {
 export function getConfig(
   { configFile, force }: getConfigParams = defaultConfigParams()
 ): configData {
-  const getConfig = () => fse.readJSONSync(configFile, { encoding: "utf-8" })
+  const getConfig = () =>
+    fse.readJSONSync(configFile, { encoding: "utf-8" }) as configData
 
   // do not set config data if forced
   if (force) {

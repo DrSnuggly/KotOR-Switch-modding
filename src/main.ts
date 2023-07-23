@@ -2,8 +2,12 @@
 import { Command, Option } from "@commander-js/extra-typings"
 import chalk from "chalk"
 
+import type { FinalizeCommandResult } from "./finalize"
 import { finalizeCommand } from "./finalize"
+import type { InitializeCommandResult } from "./initialize"
 import { initializeCommand } from "./initialize"
+
+export type SubCommandResults = InitializeCommandResult | FinalizeCommandResult
 
 globalThis.wasWarned = false
 
@@ -45,5 +49,5 @@ const program = new Command()
   })
 
 if (require.main === module) {
-  program.parseAsync(process.argv).then()
+  program.parseAsync(process.argv).catch(() => {})
 }

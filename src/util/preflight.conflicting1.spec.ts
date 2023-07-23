@@ -20,7 +20,7 @@ beforeAll(() => {
 })
 
 // directory state checks
-describe("directory state checks", async () => {
+describe("directory state checks", () => {
   test("fail to assert game root exists", async () => {
     await assertGameRootExists(command)
     expect(mockExit).toHaveBeenCalledWith(FILE_SYSTEM_ERROR)

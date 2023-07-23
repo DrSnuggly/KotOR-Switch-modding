@@ -30,7 +30,7 @@ beforeAll(() => {
 })
 
 // config file existence
-describe("config file existence", async () => {
+describe("config file existence", () => {
   // assertion failure found in preflight.conflicting1.spec.ts
   test("assert default config file exists", async () => {
     await assertConfigFileExists(command)
@@ -158,7 +158,7 @@ describe("nesting checks", () => {
 })
 
 // folder contents
-describe("folder contents", async () => {
+describe("folder contents", () => {
   let emptyFolderPath: string
   let nonEmptyFolderPath: string
   let forceNonEmptyFolderPath: string
@@ -195,7 +195,7 @@ describe("folder contents", async () => {
 })
 
 // file existence
-describe("file existence", async () => {
+describe("file existence", () => {
   let filesFolderPath: string
   let existingFile: string
   let nonExistingFile: string
@@ -224,7 +224,7 @@ describe("file existence", async () => {
 })
 
 // directory state checks
-describe("directory state checks", async () => {
+describe("directory state checks", () => {
   beforeAll(() => {
     fse.mkdirSync(path.join(tempDirPath, relativeK1Config.gameRoot))
     fse.mkdirSync(path.join(tempDirPath, relativeK1Config.backupTo))

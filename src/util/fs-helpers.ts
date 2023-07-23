@@ -1,4 +1,3 @@
-import { Command } from "@commander-js/extra-typings"
 import chalk from "chalk"
 import fse from "fs-extra"
 import crypto from "node:crypto"
@@ -6,10 +5,11 @@ import readline from "readline"
 import wrap from "word-wrap"
 
 import { FILE_SYSTEM_ERROR, wrapOptions } from "~/constants"
+import type { SubCommandResults } from "~/main"
 
 export async function tryFileSystemOperation(
-  fn: Function,
-  command: Command<any[], any>
+  fn: () => void | Promise<void>,
+  command: SubCommandResults
 ) {
   try {
     await fn()
@@ -30,7 +30,7 @@ export async function tryFileSystemOperation(
 export async function readFileLines(
   file: string,
   callback: (line: string) => void | Promise<void> | true | Promise<true>,
-  stopIterationSignal: any = true
+  stopIterationSignal = true
 ) {
   const fileStream = fse.createReadStream(file)
 

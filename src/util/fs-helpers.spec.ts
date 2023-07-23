@@ -21,7 +21,7 @@ beforeAll(() => {
 })
 
 // file system error wrapper
-describe("file system error wrapper", async () => {
+describe("file system error wrapper", () => {
   test("fail to assert fs op fails without error", async () => {
     await tryFileSystemOperation(() => {
       fse.readJSONSync("wrong-file.json")
@@ -37,7 +37,7 @@ describe("file system error wrapper", async () => {
 })
 
 // file read stream
-describe("file read stream", async () => {
+describe("file read stream", () => {
   test("read all lines", async () => {
     const readLines: string[] = []
     await readFileLines(tempFilePath, (line: string) => {

@@ -1,22 +1,22 @@
-import { Command } from "@commander-js/extra-typings"
 import chalk from "chalk"
 import fse from "fs-extra"
 import path from "node:path"
 
 import { UNSUPPORTED_LANGUAGE, k2AssetsDir } from "~/constants"
+import type { FinalizeCommandResult } from "~/finalize/index"
+import type { configData } from "~/util/config"
 import {
-  configData,
   getAbsoluteGameRoot,
   getAbsoluteOutputTo,
   getConfig,
 } from "~/util/config"
 import { tryFileSystemOperation } from "~/util/fs-helpers"
 
+import type { finalizeParams } from "./shared"
 import {
   backUp,
   checkAndMoveTextures,
   cleanUpEmptyFolders,
-  finalizeParams,
   markAsFinalized,
   moveExactROMFileMatches,
   moveOverrideFileType,
@@ -28,7 +28,7 @@ import {
 } from "./shared"
 
 export async function finalizeK2(
-  command: Command<any[], any>,
+  command: FinalizeCommandResult,
   { force, backup, forceBackup, restoreBackup }: finalizeParams
 ) {
   // early exit if the user is trying to restore from a backup
@@ -83,13 +83,13 @@ type moveLocalizedFilesParams = {
 }
 
 async function moveLocalizedFiles(
-  command: Command<any[], any>,
+  command: FinalizeCommandResult,
   { targetFolder, gameRoot }: moveLocalizedFilesParams
 ) {
   process.stdout.write(`Moving '${targetFolder}' localized contents... `)
 
   let count = 0
-  const config = await getConfig()
+  const config = getConfig()
   const baseLocalizedFolder = path.join(gameRoot, "Localized")
   let localizedSubFolder: string
   switch (config.languageCode) {

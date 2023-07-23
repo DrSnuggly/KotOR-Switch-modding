@@ -1,21 +1,21 @@
-import { Command } from "@commander-js/extra-typings"
 import fse from "fs-extra"
 import path from "node:path"
 
 import { k1AssetsDir } from "~/constants"
+import type { FinalizeCommandResult } from "~/finalize/index"
+import type { configData } from "~/util/config"
 import {
-  configData,
   getAbsoluteGameRoot,
   getAbsoluteOutputTo,
   getConfig,
 } from "~/util/config"
 import { tryFileSystemOperation } from "~/util/fs-helpers"
 
+import type { finalizeParams } from "./shared"
 import {
   backUp,
   checkAndMoveTextures,
   cleanUpEmptyFolders,
-  finalizeParams,
   markAsFinalized,
   moveExactROMFileMatches,
   moveOverrideFileType,
@@ -27,7 +27,7 @@ import {
 } from "./shared"
 
 export async function finalizeK1(
-  command: Command<any[], any>,
+  command: FinalizeCommandResult,
   { force, backup, forceBackup, restoreBackup }: finalizeParams
 ) {
   if (restoreBackup) {
@@ -87,7 +87,7 @@ type moveLocalizedDialogFileParams = {
 }
 
 export async function moveLocalizedFiles(
-  command: Command<any[], any>,
+  command: FinalizeCommandResult,
   { gameRoot }: moveLocalizedDialogFileParams
 ) {
   process.stdout.write("Moving localized files...")

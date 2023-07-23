@@ -1,4 +1,3 @@
-import { Command } from "@commander-js/extra-typings"
 import chalk from "chalk"
 import fse from "fs-extra"
 import globby from "globby"
@@ -15,6 +14,7 @@ import {
   languageCodes,
   wrapOptions,
 } from "~/constants"
+import type { SubCommandResults } from "~/main"
 
 import {
   configFileExists,
@@ -23,7 +23,7 @@ import {
 } from "./config"
 import { tryFileSystemOperation } from "./fs-helpers"
 
-export async function assertConfigFileExists(command: Command<any[], any>) {
+export async function assertConfigFileExists(command: SubCommandResults) {
   await tryFileSystemOperation(() => {
     if (!configFileExists()) {
       console.error(chalk.red("error") + "!\n")
@@ -41,7 +41,7 @@ export async function assertConfigFileExists(command: Command<any[], any>) {
 }
 
 export function assertLanguageIsSupported(
-  command: Command<any[], any>,
+  command: SubCommandResults,
   languageCode: string
 ) {
   if (!languageCodes.includes(languageCode)) {
@@ -75,7 +75,7 @@ export function isChild(
 }
 
 export function assertIsNotNested(
-  command: Command<any[], any>,
+  command: SubCommandResults,
   { value: first, descriptor: firstDescriptor }: NestingCheckInput,
   { value: second, descriptor: secondDescriptor }: NestingCheckInput,
   unidirectional = false
@@ -109,7 +109,7 @@ export function isFolderEmpty(folderPath: string) {
 }
 
 export async function assertFolderIsEmpty(
-  command: Command<any[], any>,
+  command: SubCommandResults,
   folderPath: string,
   force = false
 ) {
@@ -136,7 +136,7 @@ export async function assertFolderIsEmpty(
 
 // file existence checks
 export async function assertFileDoesNotExist(
-  command: Command<any[], any>,
+  command: SubCommandResults,
   filePath: string,
   force = false
 ) {
@@ -159,7 +159,7 @@ export async function assertFileDoesNotExist(
 }
 
 // game root directory checks
-export async function assertGameRootExists(command: Command<any[], any>) {
+export async function assertGameRootExists(command: SubCommandResults) {
   await assertConfigFileExists(command)
   await tryFileSystemOperation(() => {
     if (!fse.existsSync(getAbsoluteGameRoot())) {
@@ -178,7 +178,7 @@ export async function assertGameRootExists(command: Command<any[], any>) {
 }
 
 // backup directory checks
-export async function assertBackupExists(command: Command<any[], any>) {
+export async function assertBackupExists(command: SubCommandResults) {
   // this assert can live outside the tryFileSystemOperation because it has
   // its own internally
   await assertConfigFileExists(command)
@@ -199,7 +199,7 @@ export async function assertBackupExists(command: Command<any[], any>) {
 }
 
 // finalized checks
-export async function assertIsNotFinalized(command: Command<any[], any>) {
+export async function assertIsNotFinalized(command: SubCommandResults) {
   await assertConfigFileExists(command)
   await assertGameRootExists(command)
   await tryFileSystemOperation(() => {

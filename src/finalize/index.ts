@@ -1,12 +1,14 @@
 import { Command, Option } from "@commander-js/extra-typings"
 
+import type { finalizeParams } from "~/finalize/shared"
 import { getConfig } from "~/util/config"
 import { assertConfigFileExists } from "~/util/preflight"
 
 import { finalizeK1 } from "./k1"
 import { finalizeK2 } from "./k2"
 
-export const finalizeCommand = new Command()
+export type FinalizeCommandResult = Command<[], finalizeParams>
+export const finalizeCommand: FinalizeCommandResult = new Command()
   .name("finalize")
   .summary(
     "restructure the game folder to what the Nintendo Switch game port expects"

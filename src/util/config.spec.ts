@@ -3,16 +3,17 @@ import path from "node:path"
 import { temporaryDirectory } from "tempy"
 
 import { relativeK1Config } from "!/vitest/constants"
+import type { resolvableConfigData } from "!/vitest/utils"
+import { writeConfigFile } from "!/vitest/utils"
 
+import type { configData, getConfigParams } from "./config"
 import {
-  configData,
   configFileExists,
   getAbsoluteBackupTo,
   getAbsoluteGameRoot,
   getAbsoluteManualProcessingOutput,
   getAbsoluteOutputTo,
   getConfig,
-  getConfigParams,
 } from "./config"
 
 // base config retrieval functions
@@ -162,23 +163,20 @@ describe("K1 config with mixed paths", () => {
   let tempDirPath: string
   let configFile: string
   let configParams: getConfigParams
+  const unresolvedMixedK1Config: resolvableConfigData = {
+    ...relativeK1Config,
+    gameRoot: (tempDirPath: string) =>
+      path.join(tempDirPath, relativeK1Config.gameRoot),
+    manualProcessingOutput: (tempDirPath: string) =>
+      path.join(tempDirPath, relativeK1Config.manualProcessingOutput),
+  }
   let mixedK1Config: configData
 
   beforeAll(() => {
-    tempDirPath = temporaryDirectory()
-    configFile = path.join(tempDirPath, "config.json")
+    ;({ configFile, resolvedConfig: mixedK1Config } = writeConfigFile(
+      unresolvedMixedK1Config
+    ))
     configParams = { configFile, force: true }
-
-    mixedK1Config = {
-      ...relativeK1Config,
-      gameRoot: path.join(tempDirPath, relativeK1Config.gameRoot),
-      manualProcessingOutput: path.join(
-        tempDirPath,
-        relativeK1Config.manualProcessingOutput
-      ),
-    }
-
-    fse.writeJSONSync(configFile, mixedK1Config)
   })
 
   test("get gameRoot absolute path from config absolute path", () => {

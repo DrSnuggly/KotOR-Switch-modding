@@ -16,11 +16,11 @@ beforeAll(() => {
 })
 
 // directory state checks
-describe("directory state checks", async () => {
+describe("directory state checks", () => {
   beforeAll(() => {
     const gameRootPath = path.join(tempDirPath, relativeK1Config.gameRoot)
     fse.mkdirSync(gameRootPath)
-    fse.writeFile(path.join(gameRootPath, finalizedCanaryFileName), "test")
+    fse.writeFileSync(path.join(gameRootPath, finalizedCanaryFileName), "test")
   })
 
   test("fail to assert is not finalized", async () => {
