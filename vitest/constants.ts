@@ -1,5 +1,3 @@
-import { Command } from "@commander-js/extra-typings"
-
 import type { ConfigData } from "~/util/config"
 
 export const relativeK1Config: ConfigData = {
@@ -14,4 +12,3 @@ export const relativeK2Config: ConfigData = {
   ...relativeK1Config,
   game: 2,
 }
-export const command = new Command()

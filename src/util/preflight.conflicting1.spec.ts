@@ -3,8 +3,9 @@ import fse from "fs-extra"
 import path from "node:path"
 import { temporaryDirectory } from "tempy"
 
-import { command, relativeK1Config } from "!/vitest/constants"
+import { relativeK1Config } from "!/vitest/constants"
 import { FILE_SYSTEM_ERROR } from "~/constants"
+import { initializeCommand } from "~/initialize"
 
 import {
   assertBackupExists,
@@ -22,15 +23,15 @@ beforeAll(() => {
 // directory state checks
 describe("directory state checks", () => {
   test("fail to assert game root exists", async () => {
-    await assertGameRootExists(command)
+    await assertGameRootExists(initializeCommand)
     expect(mockExit).toHaveBeenCalledWith(FILE_SYSTEM_ERROR)
   })
   test("fail to assert backup folder exists", async () => {
-    await assertBackupExists(command)
+    await assertBackupExists(initializeCommand)
     expect(mockExit).toHaveBeenCalledWith(FILE_SYSTEM_ERROR)
   })
   test("fail to assert is not finalized", async () => {
-    await assertIsNotFinalized(command)
+    await assertIsNotFinalized(initializeCommand)
     expect(mockExit).toHaveBeenCalledWith(FILE_SYSTEM_ERROR)
   })
 })

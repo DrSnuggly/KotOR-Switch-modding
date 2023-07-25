@@ -2,12 +2,13 @@ import fse from "fs-extra"
 import path from "node:path"
 import { temporaryDirectory } from "tempy"
 
-import { command, relativeK1Config } from "!/vitest/constants"
+import { relativeK1Config } from "!/vitest/constants"
 import {
   FILE_SYSTEM_ERROR,
   INVALID_INPUT,
   UNSUPPORTED_LANGUAGE,
 } from "~/constants"
+import { initializeCommand } from "~/initialize"
 
 import {
   assertBackupExists,
@@ -33,7 +34,7 @@ beforeAll(() => {
 describe("config file existence", () => {
   // assertion failure found in preflight.conflicting1.spec.ts
   test("assert default config file exists", async () => {
-    await assertConfigFileExists(command)
+    await assertConfigFileExists(initializeCommand)
     expect(mockExit).not.toHaveBeenCalled()
   })
 })
@@ -51,7 +52,7 @@ describe("languages", () => {
   ])(
     '(fail to?) assert language "$language" support',
     ({ language, exits }) => {
-      assertLanguageIsSupported(command, language)
+      assertLanguageIsSupported(initializeCommand, language)
       if (exits) {
         expect(mockExit).toHaveBeenCalledWith(UNSUPPORTED_LANGUAGE)
       } else {
@@ -100,7 +101,7 @@ describe("nesting checks", () => {
 
   test("fail to assert is bi-directionally not nested", () => {
     assertIsNotNested(
-      command,
+      initializeCommand,
       { value: improperStructurePathChild1, descriptor: "child1" },
       { value: improperStructurePathChild2, descriptor: "child2" }
     )
@@ -108,7 +109,7 @@ describe("nesting checks", () => {
   })
   test("assert is bi-directionally not nested", () => {
     assertIsNotNested(
-      command,
+      initializeCommand,
       { value: properStructure1PathChild1, descriptor: "child1" },
       { value: properStructure1PathChild2, descriptor: "child2" }
     )
@@ -116,14 +117,14 @@ describe("nesting checks", () => {
   })
   test("fail to assert is reverse bi-directionally not nested", () => {
     assertIsNotNested(
-      command,
+      initializeCommand,
       { value: improperStructurePathChild2, descriptor: "child2" },
       { value: improperStructurePathChild1, descriptor: "child1" }
     )
   })
   test("assert is reverse bi-directionally not nested", () => {
     assertIsNotNested(
-      command,
+      initializeCommand,
       { value: properStructure1PathChild2, descriptor: "child2" },
       { value: properStructure1PathChild1, descriptor: "child1" }
     )
@@ -131,7 +132,7 @@ describe("nesting checks", () => {
   })
   test("assert unrelated folder is bi-directionally not nested", () => {
     assertIsNotNested(
-      command,
+      initializeCommand,
       { value: properStructure1PathChild1, descriptor: "child1" },
       { value: properStructure2PathChild2, descriptor: "child2" }
     )
@@ -139,7 +140,7 @@ describe("nesting checks", () => {
 
   test("fail to assert is uni-directionally not nested", () => {
     assertIsNotNested(
-      command,
+      initializeCommand,
       { value: improperStructurePath, descriptor: "parent" },
       { value: improperStructurePathChild1, descriptor: "child1" },
       true
@@ -148,7 +149,7 @@ describe("nesting checks", () => {
   })
   test("assert is uni-directionally not nested", () => {
     assertIsNotNested(
-      command,
+      initializeCommand,
       { value: properStructure1PathChild1, descriptor: "child1" },
       { value: properStructure1Path, descriptor: "parent" },
       true
@@ -181,15 +182,15 @@ describe("folder contents", () => {
   })
 
   test("fail to assert folder is empty", async () => {
-    await assertFolderIsEmpty(command, nonEmptyFolderPath)
+    await assertFolderIsEmpty(initializeCommand, nonEmptyFolderPath)
     expect(mockExit).toHaveBeenCalledWith(FILE_SYSTEM_ERROR)
   })
   test("assert folder is empty", async () => {
-    await assertFolderIsEmpty(command, emptyFolderPath)
+    await assertFolderIsEmpty(initializeCommand, emptyFolderPath)
     expect(mockExit).not.toHaveBeenCalled()
   })
   test("assert folder is empty with force", async () => {
-    await assertFolderIsEmpty(command, forceNonEmptyFolderPath, true)
+    await assertFolderIsEmpty(initializeCommand, forceNonEmptyFolderPath, true)
     expect(mockExit).not.toHaveBeenCalled()
   })
 })
@@ -210,15 +211,15 @@ describe("file existence", () => {
   })
 
   test("fail to assert file does not exist", async () => {
-    await assertFileDoesNotExist(command, existingFile)
+    await assertFileDoesNotExist(initializeCommand, existingFile)
     expect(mockExit).toHaveBeenCalledWith(INVALID_INPUT)
   })
   test("assert file does not exist", async () => {
-    await assertFileDoesNotExist(command, nonExistingFile)
+    await assertFileDoesNotExist(initializeCommand, nonExistingFile)
     expect(mockExit).not.toHaveBeenCalled()
   })
   test("assert file does not exist with force", async () => {
-    await assertFileDoesNotExist(command, forceExistingFile, true)
+    await assertFileDoesNotExist(initializeCommand, forceExistingFile, true)
     expect(mockExit).not.toHaveBeenCalled()
   })
 })
@@ -232,17 +233,17 @@ describe("directory state checks", () => {
 
   // assertion failure found in preflight.conflicting2.spec.ts
   test("assert game root exists", async () => {
-    await assertGameRootExists(command)
+    await assertGameRootExists(initializeCommand)
     expect(mockExit).not.toHaveBeenCalled()
   })
   // assertion failure found in preflight.conflicting2.spec.ts
   test("assert backup folder exists", async () => {
-    await assertBackupExists(command)
+    await assertBackupExists(initializeCommand)
     expect(mockExit).not.toHaveBeenCalled()
   })
   // assertion failure found in preflight.conflicting3.spec.ts
   test("assert is not finalized", async () => {
-    await assertIsNotFinalized(command)
+    await assertIsNotFinalized(initializeCommand)
     expect(mockExit).not.toHaveBeenCalled()
   })
 })

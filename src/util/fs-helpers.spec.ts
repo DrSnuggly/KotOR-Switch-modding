@@ -2,8 +2,8 @@ import fse from "fs-extra"
 import path from "node:path"
 import { temporaryDirectory } from "tempy"
 
-import { command } from "!/vitest/constants"
 import { FILE_SYSTEM_ERROR } from "~/constants"
+import { initializeCommand } from "~/initialize"
 
 import {
   checksumFile,
@@ -25,13 +25,13 @@ describe("file system error wrapper", () => {
   test("fail to assert fs op fails without error", async () => {
     await tryFileSystemOperation(() => {
       fse.readJSONSync("wrong-file.json")
-    }, command)
+    }, initializeCommand)
     expect(mockExit).toHaveBeenCalledWith(FILE_SYSTEM_ERROR)
   })
   test("fs op succeeds without error", async () => {
     await tryFileSystemOperation(() => {
       fse.readFileSync(tempFilePath)
-    }, command)
+    }, initializeCommand)
     expect(mockExit).not.toHaveBeenCalled()
   })
 })

@@ -2,8 +2,8 @@
 import path from "node:path"
 import { temporaryDirectory } from "tempy"
 
-import { command } from "!/vitest/constants"
 import { CONFIG_FILE_MISSING } from "~/constants"
+import { initializeCommand } from "~/initialize"
 
 import { assertConfigFileExists } from "./preflight"
 
@@ -16,7 +16,7 @@ beforeAll(() => {
 // config file existence
 describe("config file existence", () => {
   test("fail to assert default config file exists", async () => {
-    await assertConfigFileExists(command)
+    await assertConfigFileExists(initializeCommand)
     expect(mockExit).toHaveBeenCalledWith(CONFIG_FILE_MISSING)
   })
 })

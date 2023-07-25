@@ -3,8 +3,9 @@ import fse from "fs-extra"
 import path from "node:path"
 import { temporaryDirectory } from "tempy"
 
-import { command, relativeK1Config } from "!/vitest/constants"
+import { relativeK1Config } from "!/vitest/constants"
 import { ALREADY_FINALIZED, finalizedCanaryFileName } from "~/constants"
+import { initializeCommand } from "~/initialize"
 
 import { assertIsNotFinalized } from "./preflight"
 
@@ -24,7 +25,7 @@ describe("directory state checks", () => {
   })
 
   test("fail to assert is not finalized", async () => {
-    await assertIsNotFinalized(command)
+    await assertIsNotFinalized(initializeCommand)
     expect(mockExit).toHaveBeenCalledWith(ALREADY_FINALIZED)
   })
 })
