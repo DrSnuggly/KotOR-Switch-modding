@@ -8,16 +8,17 @@ module.exports = {
   parserOptions: {
     project: "tsconfig.json",
   },
-  plugins: ["@typescript-eslint"],
+  plugins: ["@typescript-eslint", "unused-imports"],
   root: true,
   rules: {
+    // bump down to warnings
+    "unused-imports/no-unused-imports": "warn",
     "@typescript-eslint/consistent-type-assertions": "warn",
     "@typescript-eslint/consistent-type-imports": "warn",
-    // bump non-critical items down to warnings
-    // turn off non-applicable items
-    "@typescript-eslint/ban-ts-comment": "off",
-    "@typescript-eslint/no-unused-vars": "off",
-    "no-extra-semi": "off",
-    "no-var": "off",
+    "@typescript-eslint/no-unused-vars": "warn",
+    // turn off
+    "@typescript-eslint/ban-ts-comment": "off", // needed in come cases
+    "no-extra-semi": "off", // needed syntax in some cases
+    "no-var": "off", // used for globals
   },
 }
