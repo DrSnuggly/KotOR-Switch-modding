@@ -8,7 +8,6 @@ export default defineConfig({
   test: {
     globals: true,
     clearMocks: true,
-    bail: 1,
     sequence: {
       sequencer: CustomSequencer,
     },
@@ -18,8 +17,8 @@ export default defineConfig({
       reporter: ["json-summary", "json", "html"],
       all: true,
     },
-    setupFiles: ["vitest/setup"],
-    include: ["src/**/*.spec.ts"],
+    setupFiles: ["test/setup"],
+    include: ["src/**/*.spec.ts", "test/**/*.spec.ts"],
   },
   resolve: {
     alias: {

@@ -4,7 +4,7 @@ import { temporaryDirectory } from "tempy"
 
 import type { ConfigData } from "~/util/config"
 
-const staticKeys = ["game", "languageCode"] as const
+const staticKeys = ["kotor", "languageCode"] as const
 type StaticKeys = keyof Pick<ConfigData, (typeof staticKeys)[number]>
 type Resolver<T> = (tempDirPath: string) => T
 type Resolvables = {
@@ -29,7 +29,7 @@ export function writeConfigFile(config: ResolvableConfigData) {
     if (typeof config[typedKey] === "function") {
       // resolve it
       clonedConfig[typedKey] = (
-        config[typedKey] as Resolver<Resolvables[keyof Resolvables]>
+        config[typedKey] as Resolver<keyof Resolvables>
       )(tempDirPath)
     }
   }
@@ -45,7 +45,7 @@ export function writeGameStructure(config: ResolvableConfigData) {
   fse.mkdirSync(path.join(tempDirPath, resolvedConfig.gameRoot))
   fse.mkdirSync(path.join(tempDirPath, resolvedConfig.outputTo))
   fse.mkdirSync(path.join(tempDirPath, resolvedConfig.backupTo))
-  fse.mkdirSync(path.join(tempDirPath, resolvedConfig.manualProcessingOutput))
+  fse.mkdirSync(path.join(tempDirPath, resolvedConfig.needsProcessingTo))
 
   return configFile
 }

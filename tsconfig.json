@@ -11,11 +11,11 @@
     "strictNullChecks": true,
     "isolatedModules": true,
     "forceConsistentCasingInFileNames": true,
-    "types": ["vitest/globals", "vitest/setup"],
+    "types": ["vitest/globals", "test/setup"],
     "paths": {
       "~/*": ["./src/*"],
       "!/*": ["./*"]
     }
   },
-  "include": ["src/**/*.ts", "vitest/**/*.ts"]
+  "include": ["src/**/*.ts", "test/**/*.ts", "vitest.config.mts"]
 }

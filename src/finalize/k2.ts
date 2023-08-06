@@ -2,131 +2,104 @@ import chalk from "chalk"
 import fse from "fs-extra"
 import path from "node:path"
 
-import { UNSUPPORTED_LANGUAGE, k2AssetsDir } from "~/constants"
-import type { FinalizeCommandResult } from "~/finalize/index"
-import type { ConfigData } from "~/util/config"
-import {
-  getAbsoluteGameRoot,
-  getAbsoluteOutputTo,
-  getConfig,
-} from "~/util/config"
-import { tryFileSystemOperation } from "~/util/fs-helpers"
+import { INVALID_INPUT, k2AssetsDir } from "~/constants"
 
-import type { FinalizeParams } from "./shared"
-import {
-  backUp,
-  checkAndMoveTextures,
-  cleanUpEmptyFolders,
-  markAsFinalized,
-  moveExactROMFileMatches,
-  moveOverrideFileType,
-  preflight,
-  removeKeyUnmodifiedFiles,
-  removeRedundantLooseTextures,
-  restore,
-  transformToAtmosphereFolderStructure,
-} from "./shared"
+import { Finalize } from "./finalize"
 
-export async function finalizeK2(
-  command: FinalizeCommandResult,
-  { force, backup, forceBackup, restoreBackup }: FinalizeParams
-) {
-  // early exit if the user is trying to restore from a backup
-  if (restoreBackup) {
-    return restore(command)
+export class FinalizeK2 extends Finalize {
+  readonly titleId = "0100B2C016252000"
+  readonly switchFilesListPath = path.join(k2AssetsDir, "switch-files.txt")
+  // noinspection SpellCheckingInspection
+  readonly fileHashes = {
+    "dialog.tlk": "c83b5b5f5ea8941a767b6364049b2108ef576928",
+    "swplayer.ini": "507105bc491dec3edf7374052b87fdabe44b0636",
   }
-  // validation
-  await preflight(command, { force })
+  overrideFilesFilter = (item: string) => item === `override/${item}`
 
-  // initialization
-  const gameRoot = getAbsoluteGameRoot()
-  const outputTo = getAbsoluteOutputTo()
-  const overrideFolder = path.join(gameRoot, "override")
-  const gameFilesListPath = path.join(k2AssetsDir, "switch-files.txt")
+  async run() {
+    // early exit if the user is trying to restore from a backup
+    if (this.restoreBackup) return this.restore()
 
-  if (backup) {
-    await backUp(command, { forceBackup })
-  }
-  await markAsFinalized(command, { gameRoot })
-  // spacer between preflight and main process
-  console.log("")
+    // validation
+    this.preflight()
 
-  // delete files
-  await removeKeyUnmodifiedFiles(command, { gameRoot })
-  await removeRedundantLooseTextures(command, { overrideFolder })
-
-  // move files
-  await moveLocalizedFiles(command, { gameRoot, targetFolder: "Docs" })
-  await moveLocalizedFiles(command, { gameRoot, targetFolder: "StreamVoice" })
-  await moveLocalizedFiles(command, { gameRoot, targetFolder: "lips" })
-  await moveOverrideFileType(command, {
-    overrideFolder,
-    targetSubFolder: "2DA",
-    fileType: "2da",
-  })
-  await checkAndMoveTextures(command, {
-    gameFilesListPath,
-    overrideFolder,
-    gameRoot,
-  })
-  await moveExactROMFileMatches(command, { gameRoot, gameFilesListPath })
-
-  // clean up
-  await cleanUpEmptyFolders(command, { gameRoot })
-  await transformToAtmosphereFolderStructure(command, { gameRoot, outputTo })
-}
-
-// move localized files
-type MoveLocalizedFilesParams = Pick<ConfigData, "gameRoot"> & {
-  targetFolder: string
-}
-
-async function moveLocalizedFiles(
-  command: FinalizeCommandResult,
-  { targetFolder, gameRoot }: MoveLocalizedFilesParams
-) {
-  process.stdout.write(`Moving '${targetFolder}' localized contents... `)
-
-  let count = 0
-  const config = getConfig()
-  const baseLocalizedFolder = path.join(gameRoot, "Localized")
-  let localizedSubFolder: string
-  switch (config.languageCode) {
-    case "en":
-      localizedSubFolder = "English"
-      break
-    case "fr":
-      localizedSubFolder = "French"
-      break
-    case "de":
-      localizedSubFolder = "German"
-      break
-    case "it":
-      localizedSubFolder = "Italian"
-      break
-    case "es":
-      localizedSubFolder = "Spanish"
-      break
-    case "jp":
-      localizedSubFolder = "Japanese"
-      break
-    default:
-      command.error(
-        chalk.red.bold("Unsupported language code found in config file."),
-        { exitCode: UNSUPPORTED_LANGUAGE }
-      )
-  }
-  const localizedFolder = path.join(baseLocalizedFolder, localizedSubFolder)
-
-  await tryFileSystemOperation(() => {
-    if (fse.existsSync(path.join(gameRoot, targetFolder))) {
-      count = fse.readdirSync(path.join(gameRoot, targetFolder)).length
-      fse.moveSync(
-        path.join(gameRoot, targetFolder),
-        path.join(localizedFolder, targetFolder)
-      )
+    // initialization
+    if (this.backup) {
+      this.backUp()
     }
-  }, command)
+    this.markAsFinalized()
+    // spacer between preflight and main process
+    console.log("")
 
-  console.log(chalk.green("done") + `, ${count} moved.`)
+    // delete files
+    await this.removeKeyUnmodifiedFiles()
+    await this.removeRedundantLooseTextures()
+
+    // move files
+    this.moveLocalizedFiles("Docs")
+    this.moveLocalizedFiles("StreamVoice")
+    this.moveLocalizedFiles("lips")
+    this.moveOverrideFileType("2DA")
+    await this.checkAndMoveTextures()
+    await this.moveExactROMFileMatches()
+
+    // clean up
+    await this.cleanUpEmptyFolders()
+    this.transformToAtmosphereFolderStructure()
+  }
+
+  moveLocalizedFiles(targetFolder: string) {
+    process.stdout.write(`Moving '${targetFolder}' localized contents... `)
+
+    let count = 0
+    const baseLocalizedFolder = path.join(
+      this.config.absoluteGameRoot,
+      "Localized"
+    )
+    let localizedSubFolder: string
+    switch (this.config.languageCode) {
+      case "en":
+        localizedSubFolder = "English"
+        break
+      case "fr":
+        localizedSubFolder = "French"
+        break
+      case "de":
+        localizedSubFolder = "German"
+        break
+      case "it":
+        localizedSubFolder = "Italian"
+        break
+      case "es":
+        localizedSubFolder = "Spanish"
+        break
+      case "jp":
+        localizedSubFolder = "Japanese"
+        break
+      default:
+        this.command.error(
+          chalk.red.bold("Unsupported language code found in config file."),
+          { exitCode: INVALID_INPUT }
+        )
+    }
+
+    this.fsh.tryFileSystemOperation(() => {
+      if (
+        fse.existsSync(path.join(this.config.absoluteGameRoot, targetFolder))
+      ) {
+        count = fse.readdirSync(
+          path.join(this.config.absoluteGameRoot, targetFolder)
+        ).length
+        fse.moveSync(
+          path.join(this.config.absoluteGameRoot, targetFolder),
+          path.join(
+            path.join(baseLocalizedFolder, localizedSubFolder),
+            targetFolder
+          )
+        )
+      }
+    })
+
+    console.log(chalk.green("done") + `, ${count} moved.`)
+  }
 }

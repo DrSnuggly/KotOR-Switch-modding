@@ -2,16 +2,21 @@
 import { Command, Option } from "@commander-js/extra-typings"
 import chalk from "chalk"
 
-import type { FinalizeCommandResult } from "./finalize"
-import { finalizeCommand } from "./finalize"
-import type { InitializeCommandResult } from "./initialize"
-import { initializeCommand } from "./initialize"
-
-export type SubCommandResults = InitializeCommandResult | FinalizeCommandResult
+import type { FinalizeCommand} from "~/finalize/command";
+import { finalizeCommand } from "~/finalize/command"
+import type { InitializeCommand } from "~/initialize/command"
+import { initializeCommand } from "~/initialize/command"
 
 globalThis.wasWarned = false
 
-const program = new Command()
+export type CommandOptions = {
+  configFile: string
+}
+export type MainCommand = Command<[], CommandOptions>
+export type SubCommand = InitializeCommand | FinalizeCommand
+export type AnyCommand = MainCommand | SubCommand
+
+export const mainCommand: MainCommand = new Command()
   .name("ksm")
   .version("3.0.0")
   .description(
@@ -19,20 +24,17 @@ const program = new Command()
   )
   .addOption(
     new Option(
-      // language=JSRegexp
-      "-i, --config-input <path>",
+      // language=RegExp
+      "-i, --config-file <path>",
       "specify the target configuration file path"
     )
       .default("config.json")
       .env("KSM_CONFIG_FILE")
   )
-  // .passThroughOptions()
+  .enablePositionalOptions(true)
+  .passThroughOptions(true)
   .addCommand(initializeCommand)
   .addCommand(finalizeCommand)
-  .hook("preSubcommand", (thisCommand) => {
-    const opts = thisCommand.optsWithGlobals()
-    globalThis.configFile = opts.configInput as string
-  })
   .hook("postAction", () => {
     if (globalThis.wasWarned) {
       console.warn(
@@ -44,10 +46,10 @@ const program = new Command()
       console.log(chalk.green.bold("\nCompleted successfully!"))
     }
   })
-  .action((options, command) => {
+  .action((_, command) => {
     command.help()
   })
 
 if (require.main === module) {
-  program.parseAsync(process.argv).catch(() => {})
+  mainCommand.parseAsync(process.argv).catch(() => {})
 }
