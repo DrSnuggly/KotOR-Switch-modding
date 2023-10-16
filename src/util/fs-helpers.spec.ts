@@ -83,12 +83,12 @@ describe("case-sensitive filesystem warning", () => {
       await exec(`mkfs.${fsType} ${imgPath}`)
       // mount the image
       await exec(`mkdir ${mntPath}`)
-      // terrible permissions, but it's a temporary directory and the
-      // only way to use the mounted image by a non-root user
-      await exec(`chmod a+rwx -R ${mntPath}`)
       // have to use sudo to mount the image, can't find a user-land way to
       // do it that doesn't ALSO require root or complex setup
       await exec(`sudo mount ${imgPath} ${mntPath}`)
+      // terrible permissions, but it's a temporary directory and the
+      // only way to use the mounted image by a non-root user
+      await exec(`sudo chmod a+rwx -R ${mntPath}`)
 
       expect(fsh.warnIfCaseSensitiveFolder(mntPath)).toBe(result)
 
