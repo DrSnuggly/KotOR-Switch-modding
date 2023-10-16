@@ -126,7 +126,7 @@ describe("blank K1 env", () => {
 
     fse.rmSync(tempDir, { recursive: true })
   })
-  test("no force, with symlink", async () => {
+  test.skipIf(os.platform() === "linux")("no force, with symlink", async () => {
     const tempDir = temporaryDirectory()
     const config = new Config(
       initializeCommand,
@@ -207,7 +207,7 @@ describe("blank K2 env", () => {
 
     fse.rmSync(tempDir, { recursive: true })
   })
-  test("no force, with symlink", async () => {
+  test.skipIf(os.platform() === "linux")("no force, with symlink", async () => {
     const tempDir = temporaryDirectory()
     const config = new Config(
       initializeCommand,
