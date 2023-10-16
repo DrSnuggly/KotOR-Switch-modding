@@ -1,5 +1,6 @@
 import fse from "fs-extra"
 import crypto from "node:crypto"
+import os from "node:os"
 import path from "node:path"
 import { temporaryDirectory } from "tempy"
 
@@ -112,7 +113,12 @@ describe("config properties", () => {
   ])("good data with %s", (_, configData) => {
     const tempDir = crypto.randomBytes(20).toString("hex")
     const config = new Config(mainCommand, path.join(tempDir, "config.json"))
-    const tempDirRegex = new RegExp("^" + tempDir + "/[^/]+$")
+    let tempDirRegex: RegExp
+    if (os.platform() === "win32") {
+      tempDirRegex = new RegExp("^" + tempDir + "\\\\[^\\\\]+$")
+    } else {
+      tempDirRegex = new RegExp("^" + tempDir + "/[^/]+$")
+    }
 
     // not sure why JSUnresolvedReference is needed below, but it is
     config.data = configData
