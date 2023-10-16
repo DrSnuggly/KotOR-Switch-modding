@@ -44,123 +44,137 @@ describe("file system error wrapper", () => {
   })
 })
 
-describe("case-sensitive filesystem warning", () => {
-  // OS checks are for platform-specific commands to create the requisite
-  // environments. do not assume that specific OSes (or even file systems) will
-  // always be case-sensitive or otherwise, always do it on a per-folder basis
-  describe.runIf(os.platform() === "linux")("Linux", () => {
-    test.each([
-      {
-        fsType: "fat",
-        mountOpts: "uid=$(id -u),gid=$(id -g)",
-        skipChown: true,
-        result: false,
-      },
-      {
-        fsType: "ext3",
-        mountOpts: undefined,
-        skipChown: false,
-        result: true,
-      },
-      {
-        fsType: "ext4",
-        mountOpts: undefined,
-        skipChown: false,
-        result: true,
-      },
-    ])("$fsType: $result", async ({ fsType, mountOpts, skipChown, result }) => {
-      const tempDir = temporaryDirectory()
-      const imgPath = path.join(tempDir, "fs.img")
-      const mntPath = path.join(tempDir, "mnt")
+describe(
+  "case-sensitive filesystem warning",
+  () => {
+    // OS checks are for platform-specific commands to create the requisite
+    // environments. do not assume that specific OSes (or even file systems)
+    // will always be case-sensitive or otherwise, always do it on a per-folder
+    // basis
+    describe.runIf(os.platform() === "linux")("Linux", () => {
+      test.each([
+        {
+          fsType: "fat",
+          mountOpts: "uid=$(id -u),gid=$(id -g)",
+          skipChown: true,
+          result: false,
+        },
+        {
+          fsType: "ext3",
+          mountOpts: undefined,
+          skipChown: false,
+          result: true,
+        },
+        {
+          fsType: "ext4",
+          mountOpts: undefined,
+          skipChown: false,
+          result: true,
+        },
+      ])(
+        "$fsType: $result",
+        async ({ fsType, mountOpts, skipChown, result }) => {
+          const tempDir = temporaryDirectory()
+          const imgPath = path.join(tempDir, "fs.img")
+          const mntPath = path.join(tempDir, "mnt")
 
-      // create a file filled with zeroes
-      await exec(`dd if=/dev/zero of=${imgPath} bs=4k count=512`)
-      // create the filesystem
-      await exec(`mkfs.${fsType} ${imgPath}`)
-      // mount the image
-      await exec(`mkdir ${mntPath}`)
-      // have to use sudo to mount the image, can't find a user-land way to
-      // do it that doesn't ALSO require root or complex setup
-      await exec(
-        `sudo mount${mountOpts ? ` -o ${mountOpts}` : ""} ${imgPath} ${mntPath}`
+          // create a file filled with zeroes
+          await exec(`dd if=/dev/zero of=${imgPath} bs=4k count=512`)
+          // create the filesystem
+          await exec(`mkfs.${fsType} ${imgPath}`)
+          // mount the image
+          await exec(`mkdir ${mntPath}`)
+          // have to use sudo to mount the image, can't find a user-land way to
+          // do it that doesn't ALSO require root or complex setup
+          await exec(
+            `sudo mount${
+              mountOpts ? ` -o ${mountOpts}` : ""
+            } ${imgPath} ${mntPath}`
+          )
+          // some file systems can't chown the mount folder after mounting
+          if (!skipChown)
+            await exec(`sudo chown $(id -u):$(id -g) -R ${mntPath}`)
+
+          expect(fsh.warnIfCaseSensitiveFolder(mntPath)).toBe(result)
+
+          await exec(`sudo umount ${mntPath}`)
+          fse.rmSync(tempDir, { recursive: true })
+        }
       )
-      // some file systems can't chown the mount folder after mounting
-      if (!skipChown) await exec(`sudo chown $(id -u):$(id -g) -R ${mntPath}`)
-
-      expect(fsh.warnIfCaseSensitiveFolder(mntPath)).toBe(result)
-
-      await exec(`sudo umount ${mntPath}`)
-      fse.rmSync(tempDir, { recursive: true })
     })
-  })
-  describe.runIf(os.platform() === "darwin")("macOS", () => {
-    test.each([
-      {
-        imgType: "MS-DOS",
-        result: false,
-      },
-      {
-        imgType: "ExFAT",
-        result: false,
-      },
-      {
-        imgType: "APFS",
-        result: false,
-      },
-      {
-        imgType: "Case-sensitive APFS",
-        result: true,
-      },
-      {
-        imgType: "Journaled HFS+",
-        result: false,
-      },
-      {
-        imgType: "Case-sensitive Journaled HFS+",
-        result: true,
-      },
-    ])("$imgType: $result", async ({ imgType, result }) => {
-      const tempDir = temporaryDirectory()
-      const imgPath = path.join(tempDir, "temp.dmg")
-      const mntPath = path.join(tempDir, "mnt")
+    describe.runIf(os.platform() === "darwin")("macOS", () => {
+      test.each([
+        {
+          imgType: "MS-DOS",
+          result: false,
+        },
+        {
+          imgType: "ExFAT",
+          result: false,
+        },
+        {
+          imgType: "APFS",
+          result: false,
+        },
+        {
+          imgType: "Case-sensitive APFS",
+          result: true,
+        },
+        {
+          imgType: "Journaled HFS+",
+          result: false,
+        },
+        {
+          imgType: "Case-sensitive Journaled HFS+",
+          result: true,
+        },
+      ])("$imgType: $result", async ({ imgType, result }) => {
+        const tempDir = temporaryDirectory()
+        const imgPath = path.join(tempDir, "temp.dmg")
+        const mntPath = path.join(tempDir, "mnt")
 
-      // create a case-insensitive disk image
-      await exec(
-        `hdiutil create -size 2m -fs '${imgType}' ${imgPath} -nospotlight`
-      )
-      // mount the image
-      await exec(
-        `hdiutil attach ${imgPath} -mountpoint ${mntPath} -nobrowse -noverify -noautofsck -noautoopen`
-      )
+        // create a case-insensitive disk image
+        await exec(
+          `hdiutil create -size 2m -fs '${imgType}' ${imgPath} -nospotlight`
+        )
+        // mount the image
+        await exec(
+          `hdiutil attach ${imgPath} -mountpoint ${mntPath} -nobrowse -noverify -noautofsck -noautoopen`
+        )
 
-      expect(fsh.warnIfCaseSensitiveFolder(mntPath)).toBe(result)
+        expect(fsh.warnIfCaseSensitiveFolder(mntPath)).toBe(result)
 
-      await exec(`hdiutil detach ${mntPath}`)
-      fse.rmSync(tempDir, { recursive: true })
+        await exec(`hdiutil detach ${mntPath}`)
+        fse.rmSync(tempDir, { recursive: true })
+      })
     })
-  })
-  describe.runIf(os.platform() === "win32")("Windows", () => {
-    test.each([
-      {
-        sensitivity: "disable",
-        result: false,
-      },
-      {
-        sensitivity: "enable",
-        result: true,
-      },
-    ])("sensitivity $sensitivity: $result", async ({ sensitivity, result }) => {
-      const tempDir = temporaryDirectory()
-      // disable case-sensitivity for tempDir using fsutil
-      await exec(
-        `fsutil.exe file setCaseSensitiveInfo ${tempDir} ${sensitivity}`
-      )
+    describe.runIf(os.platform() === "win32")("Windows", () => {
+      test.each([
+        {
+          sensitivity: "disable",
+          result: false,
+        },
+        {
+          sensitivity: "enable",
+          result: true,
+        },
+      ])(
+        "sensitivity $sensitivity: $result",
+        async ({ sensitivity, result }) => {
+          const tempDir = temporaryDirectory()
+          // disable case-sensitivity for tempDir using fsutil
+          await exec(
+            `fsutil.exe file setCaseSensitiveInfo ${tempDir} ${sensitivity}`
+          )
 
-      expect(fsh.warnIfCaseSensitiveFolder(tempDir)).toBe(result)
-      fse.rmSync(tempDir, { recursive: true })
+          expect(fsh.warnIfCaseSensitiveFolder(tempDir)).toBe(result)
+          fse.rmSync(tempDir, { recursive: true })
+        }
+      )
     })
-  })
-})
+  },
+  { timeout: 30 * 1000 } // 30 seconds
+)
 
 describe("file read stream", () => {
   const lines = ["line1", "line2", "line3"]
