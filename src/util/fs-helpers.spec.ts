@@ -90,11 +90,11 @@ echo w # write changes
       await exec(`mkfs.${fsType} ${imgPath}`)
       // mount the image
       await exec(`mkdir ${mntPath}`)
-      await exec(`mount ${imgPath} ${mntPath}`)
+      await exec(`sudo mount ${imgPath} ${mntPath}`)
 
       expect(fsh.warnIfCaseSensitiveFolder(mntPath)).toBe(result)
 
-      await exec(`umount ${mntPath}`)
+      await exec(`sudo umount ${mntPath}`)
       fse.rmSync(tempDir, { recursive: true })
     })
   })
