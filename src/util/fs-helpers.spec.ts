@@ -62,17 +62,23 @@ describe("case-sensitive filesystem warning", () => {
     test.each([
       {
         fsType: "fat",
+        mountOpts: "uid=$(id -u),gid=$(id -g)",
+        skipChown: true,
         result: false,
       },
       {
         fsType: "ext3",
+        mountOpts: undefined,
+        skipChown: false,
         result: true,
       },
       {
         fsType: "ext4",
+        mountOpts: undefined,
+        skipChown: false,
         result: true,
       },
-    ])("$fsType: $result", async ({ fsType, result }) => {
+    ])("$fsType: $result", async ({ fsType, mountOpts, skipChown, result }) => {
       const tempDir = temporaryDirectory()
       const imgPath = path.join(tempDir, "fs.img")
       const mntPath = path.join(tempDir, "mnt")
@@ -85,8 +91,11 @@ describe("case-sensitive filesystem warning", () => {
       await exec(`mkdir ${mntPath}`)
       // have to use sudo to mount the image, can't find a user-land way to
       // do it that doesn't ALSO require root or complex setup
-      await exec(`sudo mount ${imgPath} ${mntPath}`)
-      await exec(`sudo chown $(id -u):$(id -u) -R ${mntPath}`)
+      await exec(
+        `sudo mount${mountOpts ? ` -o ${mountOpts}` : ""} ${imgPath} ${mntPath}`
+      )
+      // some file systems can't chown the mount folder after mounting
+      if (!skipChown) await exec(`sudo chown $(id -u):$(id -g) -R ${mntPath}`)
 
       expect(fsh.warnIfCaseSensitiveFolder(mntPath)).toBe(result)
 
