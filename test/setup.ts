@@ -1,6 +1,10 @@
 import type { SpyInstance } from "vitest"
 import { vi } from "vitest"
 
+import { finalizeCommand } from "~/finalize"
+import { initializeCommand } from "~/initialize"
+import { mainCommand } from "~/main"
+
 // var is required for globalThis
 declare global {
   // noinspection ES6ConvertVarToLetConst
@@ -25,6 +29,18 @@ if (!globalThis.initialized) {
   vi.spyOn(console, "error").mockImplementation(() => {})
   vi.spyOn(console, "warn").mockImplementation(() => {})
   vi.spyOn(console, "log").mockImplementation(() => {})
+  // more useful command error output
+  vi.spyOn(mainCommand, "error").mockImplementation((message, options) => {
+    throw new Error(`${message} (${options?.exitCode})`)
+  })
+  vi.spyOn(initializeCommand, "error").mockImplementation(
+    (message, options) => {
+      throw new Error(`${message} (${options?.exitCode})`)
+    }
+  )
+  vi.spyOn(finalizeCommand, "error").mockImplementation((message, options) => {
+    throw new Error(`${message} (${options?.exitCode})`)
+  })
 
   globalThis.initialized = true
 }

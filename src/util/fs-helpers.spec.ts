@@ -11,19 +11,9 @@ import { FILE_SYSTEM_ERROR } from "~/constants"
 import { mainCommand } from "~/main"
 import { FSHelpers } from "~/util/fs-helpers"
 
-// mock command exit for better failure messages
-const mockError = vi
-  .spyOn(mainCommand, "error")
-  .mockImplementation((message, options) => {
-    throw new Error(`${message} (${options?.exitCode})`)
-  })
 const fsh = new FSHelpers(mainCommand)
 // promisify exec, so we can use await instead of messing with callbacks
 const exec = promisify(nodeExec)
-
-afterAll(() => {
-  mockError.mockRestore()
-})
 
 describe("file system error wrapper", () => {
   let tempDir: string
