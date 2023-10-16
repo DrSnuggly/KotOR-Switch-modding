@@ -23,6 +23,7 @@ if (!globalThis.initialized) {
   vi.spyOn(process.stderr, "write").mockImplementation(() => false)
   vi.spyOn(process.stdout, "write").mockImplementation(() => false)
   vi.spyOn(console, "error").mockImplementation(() => {})
+  vi.spyOn(console, "warn").mockImplementation(() => {})
   vi.spyOn(console, "log").mockImplementation(() => {})
 
   globalThis.initialized = true
