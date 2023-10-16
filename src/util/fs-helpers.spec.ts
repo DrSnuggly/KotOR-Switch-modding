@@ -62,40 +62,23 @@ describe("case-sensitive filesystem warning", () => {
     test.each([
       {
         fsType: "fat",
-        fdiskType: "06", // FAT16
         result: false,
       },
       {
         fsType: "ext3",
-        fdiskType: "linux",
         result: true,
       },
       {
         fsType: "ext4",
-        fdiskType: "linux",
         result: true,
       },
-    ])("$fsType: $result", async ({ fsType, fdiskType, result }) => {
+    ])("$fsType: $result", async ({ fsType, result }) => {
       const tempDir = temporaryDirectory()
       const imgPath = path.join(tempDir, "fs.img")
       const mntPath = path.join(tempDir, "mnt")
 
       // create a file filled with zeroes
       await exec(`dd if=/dev/zero of=${imgPath} count=2 bs=1M`)
-      // create the partition table and partition
-      await exec(
-        `(
-echo o # new empty DOS partition table
-echo n # new partition
-echo p # primary partition
-echo 1 # partition number
-echo   # first sector (accept default)
-echo   # last sector (accept default)
-echo t # change partition type
-echo ${fdiskType}
-echo w # write changes
-) | fdisk ${imgPath}`
-      )
       // create the filesystem
       await exec(`mkfs.${fsType} ${imgPath}`)
       // mount the image
