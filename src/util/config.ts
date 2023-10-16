@@ -183,7 +183,8 @@ export class Config {
 
   private pathIsChildOf(from: string, to: string) {
     const relativePath = path.relative(path.resolve(from), path.resolve(to))
-    return relativePath.slice(0, 2) !== ".."
+    // if the looks relative or begins with a drive letter, it's not a child
+    return relativePath.slice(0, 2) !== ".." && relativePath[1] !== ":"
   }
 
   private assertIsNotNested(from: string, to: string, unidirectional = false) {
