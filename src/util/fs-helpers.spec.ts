@@ -105,7 +105,7 @@ echo w # write changes
       await exec(`sudo mount ${imgPath} ${mntPath}`)
       // terrible permissions, but it's a temporary directory and the
       // only way to use the mounted image by a non-root user
-      await exec(`sudo chmod 777 ${mntPath}`)
+      await exec(`sudo chmod 777 -R ${mntPath}`)
 
       expect(fsh.warnIfCaseSensitiveFolder(mntPath)).toBe(result)
 
