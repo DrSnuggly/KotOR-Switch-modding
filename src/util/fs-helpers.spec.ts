@@ -78,7 +78,7 @@ describe("case-sensitive filesystem warning", () => {
       const mntPath = path.join(tempDir, "mnt")
 
       // create a file filled with zeroes
-      await exec(`dd if=/dev/zero of=${imgPath} count=2 bs=1M`)
+      await exec(`dd if=/dev/zero of=${imgPath} bs=4k count=512`)
       // create the filesystem
       await exec(`mkfs.${fsType} ${imgPath}`)
       // mount the image
