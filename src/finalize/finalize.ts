@@ -108,7 +108,7 @@ export abstract class Finalize {
 
     this.fsh.tryFileSystemOperation(() => {
       // remove the game root folder
-      fse.removeSync(this.config.absoluteGameRoot)
+      fse.rmSync(this.config.absoluteGameRoot, { recursive: true })
       // copy the backup folder contents to the game root folder
       fse.moveSync(this.config.absoluteBackupTo, this.config.absoluteGameRoot)
     })
@@ -195,7 +195,7 @@ export abstract class Finalize {
           (await this.fsh.checksumFile(targetFilePath)) ===
             this.fileHashes[fileName]
         ) {
-          fse.removeSync(targetFilePath)
+          fse.rmSync(targetFilePath)
           count++
         }
       }
@@ -241,7 +241,7 @@ export abstract class Finalize {
         )
         // remove any redundant textures, if any are found
         for await (const redundantTexture of redundantTextures) {
-          fse.removeSync(redundantTexture as string)
+          fse.rmSync(redundantTexture as string)
           count++
         }
       }
@@ -585,7 +585,7 @@ export abstract class Finalize {
 
         // if the directory is now empty, remove it
         if (contents.length === 0) {
-          fse.removeSync(dirPath as string)
+          fse.rmSync(dirPath as string, { recursive: true })
           count++
         }
       }

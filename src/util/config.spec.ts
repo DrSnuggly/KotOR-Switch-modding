@@ -250,7 +250,7 @@ describe("config properties", () => {
         INVALID_INPUT.toString()
       )
 
-      fse.removeSync(tempDir)
+      fse.rmSync(tempDir, { recursive: true })
     }
   )
 
@@ -295,7 +295,7 @@ describe("config filesystem interactions", () => {
 
     expect(config.data).toEqual(relativeK1Config)
 
-    fse.removeSync(tempDir)
+    fse.rmSync(tempDir, { recursive: true })
   })
   test("load bad data", () => {
     const tempDir = temporaryDirectory()
@@ -304,7 +304,7 @@ describe("config filesystem interactions", () => {
 
     expect(() => config.data).toThrowError(INVALID_INPUT.toString())
 
-    fse.removeSync(tempDir)
+    fse.rmSync(tempDir, { recursive: true })
   })
   test("save good data", () => {
     const tempDir = temporaryDirectory()
@@ -314,6 +314,6 @@ describe("config filesystem interactions", () => {
     config.save()
     expect(fse.readJSONSync(config.configFile)).toEqual(relativeK1Config)
 
-    fse.removeSync(tempDir)
+    fse.rmSync(tempDir, { recursive: true })
   })
 })

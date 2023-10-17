@@ -21,7 +21,7 @@ describe("file system error wrapper", () => {
     tempDir = temporaryDirectory()
   })
   afterAll(() => {
-    fse.removeSync(tempDir)
+    fse.rmSync(tempDir, { recursive: true })
   })
 
   test("fail to assert fs op succeeds without error", () => {
@@ -183,7 +183,7 @@ describe("file read stream", () => {
     tempDir = temporaryDirectory()
   })
   afterAll(() => {
-    fse.removeSync(tempDir)
+    fse.rmSync(tempDir, { recursive: true })
   })
 
   test("no ending newline", async () => {
@@ -230,7 +230,7 @@ describe("checksum files", () => {
     fse.writeFileSync(tempFile, "test\n")
   })
   afterAll(() => {
-    fse.removeSync(tempDir)
+    fse.rmSync(tempDir, { recursive: true })
   })
 
   test("file checksum matches", async () => {
@@ -252,7 +252,7 @@ describe("folder status", () => {
     tempDir = temporaryDirectory()
   })
   afterAll(() => {
-    fse.removeSync(tempDir)
+    fse.rmSync(tempDir, { recursive: true })
   })
 
   test("folder is empty", () => {
@@ -261,7 +261,7 @@ describe("folder status", () => {
     fsh.assertFolderIsEmpty(tempDir)
     expect(mockExit).not.toHaveBeenCalled()
 
-    fse.removeSync(tempDir)
+    fse.rmSync(tempDir, { recursive: true })
   })
   test("folder has folder", () => {
     const tempDir = temporaryDirectory()
@@ -271,7 +271,7 @@ describe("folder status", () => {
       FILE_SYSTEM_ERROR.toString()
     )
 
-    fse.removeSync(tempDir)
+    fse.rmSync(tempDir, { recursive: true })
   })
   test("folder has normal file", () => {
     const tempDir = temporaryDirectory()
@@ -281,7 +281,7 @@ describe("folder status", () => {
       FILE_SYSTEM_ERROR.toString()
     )
 
-    fse.removeSync(tempDir)
+    fse.rmSync(tempDir, { recursive: true })
   })
   test("folder has hidden file", () => {
     const tempDir = temporaryDirectory()
@@ -295,6 +295,6 @@ describe("folder status", () => {
     fsh.assertFolderIsEmpty(tempDir)
     expect(mockExit).not.toHaveBeenCalled()
 
-    fse.removeSync(tempDir)
+    fse.rmSync(tempDir, { recursive: true })
   })
 })
