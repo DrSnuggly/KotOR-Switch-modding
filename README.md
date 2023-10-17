@@ -46,12 +46,6 @@ NOTE: It's **highly** recommended to read this entire section before starting.
 
 - A computer to install mods with — mods cannot be installed directly on the
   Nintendo Switch).
-  - **NOTE**: this project currently ONLY works with Bash, which is available
-    by default on Linux and macOS. For Windows, please use either
-    [WSL](https://learn.microsoft.com/en-us/windows/wsl/install) (recommended)
-    or [Cygwin](https://www.cygwin.com).
-    - An issue is already open for porting these scripts to PowerShell —
-      contributions welcome via pull request.
 - A modded Nintendo Switch with the
   [Atmosphère](https://github.com/Atmosphere-NX/Atmosphere) custom firmware
   installed.
