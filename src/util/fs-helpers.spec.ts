@@ -183,7 +183,8 @@ describe("file read stream", () => {
     tempDir = temporaryDirectory()
   })
   afterAll(() => {
-    fse.rmSync(tempDir, { recursive: true })
+    // add retry options here since Windows can be slow to release file locks
+    fse.rmSync(tempDir, { recursive: true, maxRetries: 5, retryDelay: 200 })
   })
 
   test("no ending newline", async () => {
