@@ -208,6 +208,17 @@ describe("file read stream", () => {
     })
     expect(readLines).toEqual(lines)
   })
+  test("CRLF line endings", async () => {
+    const tempFile = path.join(tempDir, "CRLF-line-endings.txt")
+    fse.writeFileSync(tempFile, lines.join("\r\n"))
+
+    const readLines: string[] = []
+    await fsh.readFileLines(tempFile, (line: string) => {
+      readLines.push(line)
+      expect(lines).toContain(line)
+    })
+    expect(readLines).toEqual(lines)
+  })
   test("read 2 lines then stop", async () => {
     const tempFile = path.join(tempDir, "2-lines-then-stop.txt")
     fse.writeFileSync(tempFile, lines.join("\n"))
