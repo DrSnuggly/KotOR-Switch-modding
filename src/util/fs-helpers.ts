@@ -93,7 +93,10 @@ export class FSHelpers {
       // readline to close before it's done
       for await (const line of rl) {
         // break early if the callback returns true
-        if ((await callback(line)) === stopIterationSignal) break
+        if ((await callback(line)) === stopIterationSignal) {
+          rl.close()
+          break
+        }
       }
 
       rl.close()
