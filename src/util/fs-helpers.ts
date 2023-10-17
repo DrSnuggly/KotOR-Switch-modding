@@ -2,8 +2,8 @@ import chalk from "chalk"
 import fse from "fs-extra"
 import globby from "globby"
 import crypto from "node:crypto"
+import { open } from "node:fs/promises"
 import path from "node:path"
-import readline from "readline"
 import wrap from "word-wrap"
 
 import { FILE_SYSTEM_ERROR, INVALID_INPUT, wrapOptions } from "~/constants"
@@ -80,23 +80,16 @@ export class FSHelpers {
     this.assertFileExists(filePath)
 
     return this.tryFileSystemOperation(async () => {
-      const fileStream = fse.createReadStream(filePath)
-
-      const rl = readline.createInterface({
-        input: fileStream,
-        // Note: we use the crlfDelay option to recognize all instances of CR LF
-        // ('\r\n') in input.txt as a single line break.
-        crlfDelay: Infinity,
-      })
+      const file = await open(filePath, "r")
 
       // this is pretty finicky — any async functions before this will cause the
       // readline to close before it's done
-      for await (const line of rl) {
+      for await (const line of file.readLines()) {
         // break early if the callback returns true
         if ((await callback(line)) === stopIterationSignal) break
       }
 
-      rl.close()
+      await file.close()
     })
   }
 
