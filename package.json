@@ -62,7 +62,7 @@
   },
   "devDependencies": {
     "@commander-js/extra-typings": "^11.0.0",
-    "@trivago/prettier-plugin-sort-imports": "^4.1.1",
+    "@trivago/prettier-plugin-sort-imports": "^4.2.0",
     "@types/fs-extra": "^11.0.1",
     "@types/node": "^20.4.1",
     "@types/temp": "^0.9.1",
@@ -77,7 +77,7 @@
     "eslint-plugin-unused-imports": "^3.0.0",
     "fswin": "^3.23.311",
     "pkg": "^5.8.1",
-    "prettier": "^3.0.0",
+    "prettier": "^3.0.3",
     "rimraf": "^5.0.1",
     "tempy": "^3.1.0",
     "ts-node": "^10.9.1",
