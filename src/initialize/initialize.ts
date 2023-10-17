@@ -1,5 +1,6 @@
 import chalk from "chalk"
 import fse from "fs-extra"
+import type { symlink } from "node:fs"
 import path from "node:path"
 import os from "os"
 
@@ -112,11 +113,16 @@ export class Initialize {
         `Creating desktop symlink '${path.basename(this.desktopSymlink)}'... `
       )
 
+      // force a junction type on Windows OS due to admin permission issues
+      let type: symlink.Type | undefined = undefined
+      if (os.platform() === "win32") type = "junction"
+
       this.fsh.tryFileSystemOperation(() => {
         // can safely cast since we confirmed the existence above
         fse.symlinkSync(
           this.config.absoluteGameRoot,
-          this.desktopSymlink as string
+          this.desktopSymlink as string,
+          type
         )
       })
 
