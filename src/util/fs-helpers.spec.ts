@@ -197,9 +197,9 @@ describe("file read stream", () => {
     })
     expect(readLines).toEqual(lines)
   })
-  test.fails("with ending newline", async () => {
+  test("with ending newline", async () => {
     const tempFile = path.join(tempDir, "with-ending-newline.txt")
-    fse.writeFileSync(tempFile, lines.join("\n" + "\n"))
+    fse.writeFileSync(tempFile, lines.join("\n") + "\n")
 
     const readLines: string[] = []
     await fsh.readFileLines(tempFile, (line: string) => {
