@@ -138,8 +138,8 @@ describe("blank K1 env", () => {
       k1: true,
       desktopSymlink: generateSymlinkPath("kotor1"),
     }
-
     config.data = configData
+
     const initialize = new Initialize(initializeCommand, {
       ...configData,
       config,
