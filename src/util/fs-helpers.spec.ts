@@ -144,7 +144,7 @@ describe(
 
         expect(fsh.warnIfCaseSensitiveFolder(mntPath)).toBe(result)
 
-        await exec(`hdiutil detach ${mntPath}`)
+        await exec(`hdiutil detach ${mntPath} -force`)
         fse.rmSync(tempDir, { recursive: true })
       })
     })
