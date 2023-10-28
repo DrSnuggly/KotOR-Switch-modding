@@ -1,11 +1,15 @@
 // Nintendo Switch title ID for game port
 // directories to bundled into executable
 import path from "node:path"
+import type wrap from "word-wrap"
 
 // console, ignore this section since we can't test it very well
 /* c8 ignore start */
 let consoleWidth = process.stdout.columns || 80
-export const wrapOptions = { width: consoleWidth, indent: "" }
+export const wrapOptions = {
+  width: consoleWidth,
+  indent: "",
+} satisfies wrap.IOptions
 // update consoleWidth when the terminal is resized
 process.stdout.on("resize", () => {
   consoleWidth = process.stdout.columns || 80
@@ -23,7 +27,7 @@ export const k2AssetsDir = `${assetsDir}/k2`
 export const finalizedCanaryFileName = ".finalized"
 
 // other
-export const languageCodes = ["en", "ja", "it", "fr", "de", "es"]
+export const languageCodes = ["en", "ja", "it", "fr", "de", "es"] as const
 
 // exit codes
 export const UNSUPPORTED_GAME = 1

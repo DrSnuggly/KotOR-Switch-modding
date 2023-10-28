@@ -9,41 +9,10 @@ import { Finalize } from "./finalize"
 export class FinalizeK1 extends Finalize {
   readonly titleId = "0100854015868800"
   readonly switchFilesListPath = path.join(k1AssetsDir, "switch-files.txt")
-  // noinspection SpellCheckingInspection
-  readonly fileHashes = {
-    "dialog.tlk": "c83b5b5f5ea8941a767b6364049b2108ef576928",
-    "swplayer.ini": "507105bc491dec3edf7374052b87fdabe44b0636",
-  }
-  overrideFilesFilter = () => false
-
-  async run() {
-    if (this.restoreBackup) return this.restore()
-    // validation
-    this.preflight()
-
-    // initialization
-    if (this.backup) {
-      this.backUp()
-    }
-    this.markAsFinalized()
-    // spacer between preflight and main process
-    console.log("")
-
-    // delete files
-    await this.removeKeyUnmodifiedFiles()
-    await this.removeRedundantLooseTextures()
-
-    // move files
-    await this.moveExactROMFileMatches()
-    await this.checkAndMoveTextures()
-    this.moveOverrideFileType("2da")
-    this.moveOverrideFileType("dlg")
-    this.moveOverrideFileType("xbox_gui", "gui")
-    this.moveLocalizedFiles()
-
-    // clean up
-    await this.cleanUpEmptyFolders()
-    this.transformToAtmosphereFolderStructure()
+  nestedOverrideFileTypes = {
+    "2da": "2da",
+    dlg: "dlg",
+    gui: "xbox_gui",
   }
 
   moveLocalizedFiles() {

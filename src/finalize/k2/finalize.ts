@@ -9,46 +9,16 @@ import { Finalize } from "./finalize"
 export class FinalizeK2 extends Finalize {
   readonly titleId = "0100B2C016252000"
   readonly switchFilesListPath = path.join(k2AssetsDir, "switch-files.txt")
-  // noinspection SpellCheckingInspection
-  readonly fileHashes = {
-    "dialog.tlk": "c83b5b5f5ea8941a767b6364049b2108ef576928",
-    "swplayer.ini": "507105bc491dec3edf7374052b87fdabe44b0636",
-  }
-  overrideFilesFilter = (item: string) => item === `override/${item}`
+  nestedOverrideFileTypes = { "2da": "2DA" }
 
-  async run() {
-    // early exit if the user is trying to restore from a backup
-    if (this.restoreBackup) return this.restore()
-
-    // validation
-    this.preflight()
-
-    // initialization
-    if (this.backup) {
-      this.backUp()
+  moveLocalizedFiles() {
+    const targetFolders = ["Docs", "StreamVoice", "lips"]
+    for (const targetFolder of targetFolders) {
+      this.moveLocalizedFolderFiles(targetFolder)
     }
-    this.markAsFinalized()
-    // spacer between preflight and main process
-    console.log("")
-
-    // delete files
-    await this.removeKeyUnmodifiedFiles()
-    await this.removeRedundantLooseTextures()
-
-    // move files
-    this.moveLocalizedFiles("Docs")
-    this.moveLocalizedFiles("StreamVoice")
-    this.moveLocalizedFiles("lips")
-    this.moveOverrideFileType("2DA")
-    await this.checkAndMoveTextures()
-    await this.moveExactROMFileMatches()
-
-    // clean up
-    await this.cleanUpEmptyFolders()
-    this.transformToAtmosphereFolderStructure()
   }
 
-  moveLocalizedFiles(targetFolder: string) {
+  moveLocalizedFolderFiles(targetFolder: string) {
     process.stdout.write(`Moving '${targetFolder}' localized contents... `)
 
     let count = 0
