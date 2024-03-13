@@ -11,7 +11,7 @@
     "strictNullChecks": true,
     "isolatedModules": true,
     "forceConsistentCasingInFileNames": true,
-    "types": ["vitest/globals", "test/setup"],
+    "types": ["vitest/globals"],
     "paths": {
       "~/*": ["./src/*"],
       "!/*": ["./*"]

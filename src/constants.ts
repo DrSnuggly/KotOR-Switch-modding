@@ -1,6 +1,3 @@
-// Nintendo Switch title ID for game port
-// directories to bundled into executable
-import path from "node:path"
 import type wrap from "word-wrap"
 
 // console, ignore this section since we can't test it very well
@@ -15,13 +12,6 @@ process.stdout.on("resize", () => {
   consoleWidth = process.stdout.columns || 80
 })
 /* c8 ignore end */
-
-// game-specific items
-// this stupid relative path is needed to be able to read the assets directory
-// in the executable and/or the built package
-export const assetsDir = path.join(__dirname, "..", "assets")
-export const k1AssetsDir = `${assetsDir}/k1`
-export const k2AssetsDir = `${assetsDir}/k2`
 
 // files
 export const finalizedCanaryFileName = ".finalized"

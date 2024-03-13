@@ -1,4 +1,4 @@
-import type { ConfigData } from "~/util/config"
+import type { ConfigData } from "~/steps/util/config"
 
 export const relativeK1Config: ConfigData = {
   kotor: 1,

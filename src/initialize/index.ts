@@ -1,1 +1,0 @@
-export { initializeCommand } from "./command"

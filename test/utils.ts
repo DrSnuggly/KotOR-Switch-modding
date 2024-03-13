@@ -2,7 +2,7 @@ import fse from "fs-extra"
 import path from "node:path"
 import { temporaryDirectory } from "tempy"
 
-import type { ConfigData } from "~/util/config"
+import type { ConfigData } from "~/steps/util/config"
 
 const staticKeys = ["kotor", "languageCode"] as const
 type StaticKeys = keyof Pick<ConfigData, (typeof staticKeys)[number]>

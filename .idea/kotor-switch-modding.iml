@@ -9,6 +9,8 @@
       <excludeFolder url="file://$MODULE_DIR$/tmp" />
       <excludeFolder url="file://$MODULE_DIR$/coverage" />
       <excludeFolder url="file://$MODULE_DIR$/badges" />
+      <excludeFolder url="file://$MODULE_DIR$/src/games/k1/assets" />
+      <excludeFolder url="file://$MODULE_DIR$/src/games/k2/assets" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />

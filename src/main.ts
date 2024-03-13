@@ -2,25 +2,23 @@
 import { Command, Option } from "@commander-js/extra-typings"
 import chalk from "chalk"
 
-import type { FinalizeCommand} from "~/finalize/command";
-import { finalizeCommand } from "~/finalize/command"
-import type { InitializeCommand } from "~/initialize/command"
-import { initializeCommand } from "~/initialize/command"
+import { gameStepsMap } from "~/games"
+import { buildFinalizeCommand } from "~/steps/finalize/command"
+import { buildInitializeCommand } from "~/steps/initialize/command"
 
 globalThis.wasWarned = false
 
-export type CommandOptions = {
+type CommandOptions = {
   configFile: string
 }
-export type MainCommand = Command<[], CommandOptions>
-export type SubCommand = InitializeCommand | FinalizeCommand
-export type AnyCommand = MainCommand | SubCommand
 
+export type MainCommand = Command<[], CommandOptions>
 export const mainCommand: MainCommand = new Command()
   .name("ksm")
   .version("3.0.0")
   .description(
-    "Tools to help make modding Star Wars: Knights of the Old Republic I & II easier on the Nintendo Switch."
+    "Tools to help make modding easier for Star Wars: Knights of the Old" +
+      " Republic I & II for Nintendo Switch."
   )
   .addOption(
     new Option(
@@ -33,8 +31,10 @@ export const mainCommand: MainCommand = new Command()
   )
   .enablePositionalOptions(true)
   .passThroughOptions(true)
-  .addCommand(initializeCommand)
-  .addCommand(finalizeCommand)
+  // steps
+  .addCommand(buildInitializeCommand(gameStepsMap))
+  .addCommand(buildFinalizeCommand(gameStepsMap))
+  // post-run status check
   .hook("postAction", () => {
     if (globalThis.wasWarned) {
       console.warn(
@@ -46,10 +46,16 @@ export const mainCommand: MainCommand = new Command()
       console.log(chalk.green.bold("\nCompleted successfully!"))
     }
   })
+  // default help command
   .action((_, command) => {
     command.help()
   })
 
+// run command and handle unexpected errors
 if (require.main === module) {
-  mainCommand.parseAsync(process.argv).catch(() => {})
+  mainCommand.parseAsync(process.argv).catch((error) => {
+    console.error(chalk.red.bold("\nUnexpected error!"))
+    console.error(error)
+    process.exit(-1)
+  })
 }

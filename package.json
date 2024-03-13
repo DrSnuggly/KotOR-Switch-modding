@@ -8,8 +8,7 @@
     "ksm": "build/main.js"
   },
   "files": [
-    "build/**/*",
-    "assets/**/*"
+    "build/**/*"
   ],
   "scripts": {
     "clean": "rimraf build coverage dist",
@@ -30,9 +29,6 @@
     "test:ci": "vitest run"
   },
   "pkg": {
-    "assets": [
-      "assets/**/*"
-    ],
     "targets": [
       "node18-macos-arm64",
       "node18-macos-x64",
