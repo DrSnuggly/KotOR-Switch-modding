@@ -1,9 +1,9 @@
 import { Command, Option } from "@commander-js/extra-typings"
 import path from "node:path"
 
-import { languageCodes } from "~/constants"
 import type { SubCommandBuilder } from "~/steps"
 import type { ConfigData } from "~/steps/util/config"
+import { languageCodes } from "~/steps/util/config"
 import { Config } from "~/steps/util/config"
 
 const gameRootSiblingPlaceholder = "(sibling of '-c, --config-file')"

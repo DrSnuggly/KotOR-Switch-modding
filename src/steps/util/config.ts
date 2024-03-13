@@ -22,6 +22,7 @@ export type ConfigData = {
   backupTo: string
   outputTo: string
   needsProcessingTo: string
+export const languageCodes = ["en", "ja", "it", "fr", "de", "es"] as const
 }
 
 export class Config {
