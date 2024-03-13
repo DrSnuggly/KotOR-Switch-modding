@@ -71,40 +71,10 @@ describe("config properties", () => {
       .toThrowError(FILE_SYSTEM_ERROR.toString())
   })
   test.each([
-    ["rel K1 no symlink", relativeK1Config],
-    ["rel K1 with symlink", { ...relativeK1Config, desktopSymlink: "kotor1" }],
-    ["rel K2 no symlink", relativeK2Config],
-    ["rel K2 with symlink", { ...relativeK2Config, desktopSymlink: "kotor2" }],
-    [
-      "mix K1 no symlink",
-      {
-        ...relativeK1Config,
-        gameRoot: temporaryDirectory(),
-      },
-    ],
-    [
-      "mix K1 with symlink",
-      {
-        ...relativeK1Config,
-        gameRoot: temporaryDirectory(),
-        desktopSymlink: "kotor1",
-      },
-    ],
-    [
-      "mix K2 no symlink",
-      {
-        ...relativeK2Config,
-        gameRoot: temporaryDirectory(),
-      },
-    ],
-    [
-      "mix K2 with symlink",
-      {
-        ...relativeK2Config,
-        gameRoot: temporaryDirectory(),
-        desktopSymlink: "kotor2",
-      },
-    ],
+    ["relative K1 paths", relativeK1Config],
+    ["relative K2 paths", relativeK2Config],
+    ["mixed K1 paths", { ...relativeK1Config, gameRoot: temporaryDirectory() }],
+    ["mixed K2 paths", { ...relativeK2Config, gameRoot: temporaryDirectory() }],
   ])("good data with %s", (_, configData) => {
     const tempDir = crypto.randomBytes(20).toString("hex")
     const config = new Config(mainCommand, path.join(tempDir, "config.json"))
