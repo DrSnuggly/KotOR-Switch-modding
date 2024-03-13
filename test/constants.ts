@@ -1,7 +1,7 @@
 import type { ConfigData } from "~/steps/util/config"
 
 export const relativeK1Config: ConfigData = {
-  kotor: 1,
+  kotor: "1",
   languageCode: "en",
   gameRoot: "game-root",
   backupTo: "backup",
@@ -10,5 +10,5 @@ export const relativeK1Config: ConfigData = {
 }
 export const relativeK2Config: ConfigData = {
   ...relativeK1Config,
-  kotor: 2,
+  kotor: "2",
 }

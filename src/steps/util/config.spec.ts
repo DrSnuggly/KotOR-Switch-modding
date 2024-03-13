@@ -5,12 +5,7 @@ import path from "node:path"
 import { temporaryDirectory } from "tempy"
 
 import { relativeK1Config, relativeK2Config } from "!/test/constants"
-import {
-  FILE_SYSTEM_ERROR,
-  INVALID_INPUT,
-  UNSUPPORTED_GAME,
-  UNSUPPORTED_LANGUAGE,
-} from "~/constants"
+import { FILE_SYSTEM_ERROR, INVALID_INPUT } from "~/constants"
 import { mainCommand } from "~/main"
 
 import type { ConfigData } from "./config"
@@ -141,11 +136,11 @@ describe("config properties", () => {
 
   test.each([
     // unsupported value
-    ["kotor", 0, UNSUPPORTED_GAME],
-    ["kotor", 3, UNSUPPORTED_GAME],
-    ["kotor", "", UNSUPPORTED_GAME],
-    ["kotor", "0", UNSUPPORTED_GAME],
-    ["kotor", "3", UNSUPPORTED_GAME],
+    ["kotor", 0, INVALID_INPUT],
+    ["kotor", 3, INVALID_INPUT],
+    ["kotor", "", INVALID_INPUT],
+    ["kotor", "0", INVALID_INPUT],
+    ["kotor", "3", INVALID_INPUT],
     // unsupported JSON types
     ["kotor", "string", INVALID_INPUT],
     ["kotor", true, INVALID_INPUT],
@@ -156,7 +151,7 @@ describe("config properties", () => {
     ["kotor", [], INVALID_INPUT],
     ["kotor", [1, 2, 3], INVALID_INPUT],
     // unsupported value
-    ["languageCode", "ru", UNSUPPORTED_LANGUAGE],
+    ["languageCode", "ru", INVALID_INPUT],
     // unsupported JSON types
     ["languageCode", 0, INVALID_INPUT],
     ["languageCode", 1, INVALID_INPUT],

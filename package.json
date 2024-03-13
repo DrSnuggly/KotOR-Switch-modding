@@ -25,7 +25,7 @@
     "pkg:win": "pkg . --public-packages '*' --targets node18-win-arm64,node18-win-x64",
     "pkg:win:arm64": "pkg . --public-packages '*' --targets node18-win-arm64",
     "pkg:win:x64": "pkg . --public-packages '*' --targets node18-win-x64",
-    "test": "vitest --ui",
+    "test": "vitest --ui --open false",
     "test:ci": "vitest run"
   },
   "pkg": {
@@ -54,7 +54,8 @@
     "commander": "^11.0.0",
     "fs-extra": "^11.1.1",
     "globby": "^11.1.0",
-    "word-wrap": "^1.2.3"
+    "word-wrap": "^1.2.3",
+    "zod": "^3.22.4"
   },
   "devDependencies": {
     "@commander-js/extra-typings": "^11.0.0",

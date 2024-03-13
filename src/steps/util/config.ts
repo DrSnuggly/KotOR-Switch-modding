@@ -3,27 +3,91 @@ import chalk from "chalk"
 import fse from "fs-extra"
 import path from "node:path"
 import wrap from "word-wrap"
+import { z } from "zod"
 
-import {
-  INVALID_INPUT,
-  UNSUPPORTED_GAME,
-  UNSUPPORTED_LANGUAGE,
-  languageCodes,
-  wrapOptions,
-} from "~/constants"
+import { INVALID_INPUT, wrapOptions } from "~/constants"
 
 import { FSHelpers } from "./fs-helpers"
 
-const supportedGames = [1, 2] as const
-export type ConfigData = {
-  kotor: (typeof supportedGames)[number]
-  languageCode: (typeof languageCodes)[number]
-  gameRoot: string
-  backupTo: string
-  outputTo: string
-  needsProcessingTo: string
 export const languageCodes = ["en", "ja", "it", "fr", "de", "es"] as const
+const supportedGames = ["1", "2"] as const
+
+function pathIsChildOf(from: string, to: string) {
+  const relativePath = path.relative(path.resolve(from), path.resolve(to))
+  // if the looks relative or begins with a drive letter, it's not a child
+  return relativePath.slice(0, 2) !== ".." && relativePath[1] !== ":"
 }
+
+function pathsAreNested(from: string, to: string, unidirectional = false) {
+  // check if `from` is a child of `to`
+  if (pathIsChildOf(from, to)) return true
+  // check if `to` is a child of `from`
+  if (unidirectional) return false
+  return pathIsChildOf(to, from)
+}
+
+function generateSchema(configParent: string) {
+  return (
+    z
+      .object({
+        kotor: z.string({ required_error: "KotOR version is required" }).pipe(
+          z.enum(supportedGames, {
+            invalid_type_error: "KotOR version is invalid",
+          })
+        ),
+        languageCode: z.enum(languageCodes, {
+          invalid_type_error: "Language code is invalid",
+          required_error: "Language code is required",
+        }),
+        gameRoot: z.string({ required_error: "Game root is required" }),
+        backupTo: z.string({ required_error: "Backup folder is required" }),
+        outputTo: z.string({ required_error: "Output folder is required" }),
+        needsProcessingTo: z.string({
+          required_error: "Needs processing folder is required",
+        }),
+      })
+      // check if paths are nested
+      .refine((data) => !pathsAreNested(data.outputTo, configParent, true), {
+        message: "Config folder cannot be a child of the backup folder",
+      })
+      .refine((data) => !pathsAreNested(data.outputTo, data.backupTo), {
+        message: "Output and backup folders cannot be nested",
+      })
+      .refine((data) => !pathsAreNested(data.outputTo, data.gameRoot), {
+        message: "Output and game root folders cannot be nested",
+      })
+      .refine(
+        (data) => !pathsAreNested(data.outputTo, data.needsProcessingTo),
+        { message: "Output and needs processing folders cannot be nested" }
+      )
+      .refine((data) => !pathsAreNested(data.backupTo, configParent, true), {
+        message: "Config folder cannot be a child of the backup folder",
+      })
+      .refine((data) => !pathsAreNested(data.backupTo, data.gameRoot), {
+        message: "Backup and game root folders cannot be nested",
+      })
+      .refine(
+        (data) => !pathsAreNested(data.backupTo, data.needsProcessingTo),
+        { message: "Backup and needs processing folders cannot be nested" }
+      )
+      .refine((data) => !pathsAreNested(data.gameRoot, configParent, true), {
+        message: "Config folder cannot be a child of the game root folder",
+      })
+      .refine(
+        (data) => !pathsAreNested(data.gameRoot, data.needsProcessingTo),
+        { message: "Game root and needs processing folders cannot be nested" }
+      )
+      .refine(
+        (data) => !pathsAreNested(data.needsProcessingTo, configParent, true),
+        {
+          message:
+            "Config folder cannot be a child of the needs processing folder",
+        }
+      )
+  )
+}
+
+export type ConfigData = z.infer<ReturnType<typeof generateSchema>>
 
 export class Config {
   readonly configParent: string
@@ -147,64 +211,6 @@ export class Config {
     return this
   }
 
-  private assertLanguageSupported(config: ConfigData) {
-    if (!languageCodes.includes(config.languageCode)) {
-      console.error(chalk.red("error") + "!\n")
-      this.command.error(
-        chalk.red.bold(
-          wrap(
-            `The language code '${config.languageCode}' is not supported. Use 'ksm help init' for assistance.`,
-            wrapOptions
-          )
-        ),
-        { exitCode: UNSUPPORTED_LANGUAGE }
-      )
-    }
-  }
-
-  private assertGameSupported(config: ConfigData) {
-    if (!supportedGames.includes(config.kotor)) {
-      console.error(chalk.red("error") + "!\n")
-      this.command.error(
-        chalk.red.bold(
-          wrap(
-            `The game KotOR '${config.kotor}' is not supported. Use 'ksm help init' for assistance.`,
-            wrapOptions
-          )
-        ),
-        { exitCode: UNSUPPORTED_GAME }
-      )
-    }
-  }
-
-  private pathIsChildOf(from: string, to: string) {
-    const relativePath = path.relative(path.resolve(from), path.resolve(to))
-    // if the looks relative or begins with a drive letter, it's not a child
-    return relativePath.slice(0, 2) !== ".." && relativePath[1] !== ":"
-  }
-
-  private assertIsNotNested(from: string, to: string, unidirectional = false) {
-    let nested = false
-
-    // check if `from` is a child of `to`
-    if (this.pathIsChildOf(from, to)) nested = true
-    // check if `to` is a child of `from`
-    if (!unidirectional && this.pathIsChildOf(to, from)) nested = true
-
-    if (nested) {
-      console.error(chalk.red("error") + "!\n")
-      this.command.error(
-        chalk.red.bold(
-          wrap(
-            "One or more of the config options has improper nesting.",
-            wrapOptions
-          )
-        ),
-        { exitCode: INVALID_INPUT }
-      )
-    }
-  }
-
   private getAbsolutePath(inputPath: string) {
     // check if it's already absolute
     if (path.isAbsolute(inputPath)) return inputPath
@@ -212,37 +218,20 @@ export class Config {
     return path.join(this.configParent, inputPath)
   }
 
-  private validateConfig(inputConfig: unknown) {
-    // otherwise, check if it's missing any required properties
-    if (
-      !inputConfig ||
-      // separate object checks to ensure this also isn't a primitive
-      typeof inputConfig !== "object" ||
-      inputConfig.constructor !== Object ||
-      // ensure the input has the appropriate properties
-      !("kotor" in inputConfig) ||
-      !("languageCode" in inputConfig) ||
-      !("gameRoot" in inputConfig) ||
-      !("backupTo" in inputConfig) ||
-      !("outputTo" in inputConfig) ||
-      !("needsProcessingTo" in inputConfig) ||
-      // number is a bit different since we'll allow for it to be a string
-      (typeof inputConfig.kotor !== "number" &&
-        typeof inputConfig.kotor !== "string") ||
-      Number.isNaN(Number(inputConfig.kotor)) ||
-      // process all other types as normal
-      typeof inputConfig.languageCode !== "string" ||
-      typeof inputConfig.gameRoot !== "string" ||
-      typeof inputConfig.backupTo !== "string" ||
-      typeof inputConfig.outputTo !== "string" ||
-      typeof inputConfig.needsProcessingTo !== "string"
-    ) {
+  private validateConfig(inputConfig: unknown): ConfigData {
+    const parsedConfig = generateSchema(this.configParent).safeParse(
+      inputConfig
+    )
+    if (!parsedConfig.success) {
       console.error(chalk.red("error") + "!\n")
       this.command.error(
         chalk.red.bold(
           wrap(
-            "The provided config structure is invalid. Use 'ksm help init'" +
-              " for assistance.",
+            "While parsing the config, the following errors were found:\n" +
+              parsedConfig.error.errors
+                .map(({ message }) => message)
+                .join("\n") +
+              "\n\nUse 'ksm help init' for assistance.",
             wrapOptions
           )
         ),
@@ -250,29 +239,6 @@ export class Config {
       )
     }
 
-    // "cast" the kotor number as a number
-    inputConfig.kotor = Number(inputConfig.kotor)
-    // since all properties are confirmed to be present, we can safely cast it
-    const config = inputConfig as ConfigData
-
-    // ensure the config values are valid
-    this.assertGameSupported(config)
-    this.assertLanguageSupported(config)
-    // intentionally don't check if the config is a parent of the folders,
-    // since it's a file that can be in a folder that's a parent of the other
-    // folders
-    this.assertIsNotNested(config.outputTo, this.configParent, true)
-    this.assertIsNotNested(config.outputTo, config.backupTo)
-    this.assertIsNotNested(config.outputTo, config.gameRoot)
-    this.assertIsNotNested(config.outputTo, config.needsProcessingTo)
-    this.assertIsNotNested(config.backupTo, this.configParent, true)
-    this.assertIsNotNested(config.backupTo, config.gameRoot)
-    this.assertIsNotNested(config.backupTo, config.needsProcessingTo)
-    this.assertIsNotNested(config.gameRoot, this.configParent, true)
-    this.assertIsNotNested(config.gameRoot, config.needsProcessingTo)
-    this.assertIsNotNested(config.needsProcessingTo, this.configParent, true)
-
-    // finally, return the correctly-typed config
-    return config
+    return parsedConfig.data
   }
 }
