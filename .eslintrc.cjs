@@ -17,7 +17,8 @@ module.exports = {
     "@typescript-eslint/consistent-type-imports": "warn",
     "@typescript-eslint/no-unused-vars": "warn",
     // turn off
-    "@typescript-eslint/ban-ts-comment": "off", // needed in come cases
+    "@typescript-eslint/ban-ts-comment": "off", // needed in some cases
+    "@typescript-eslint/no-explicit-any": "off", // needed in some cases
     "no-extra-semi": "off", // needed syntax in some cases
     "no-var": "off", // used for globals
   },
