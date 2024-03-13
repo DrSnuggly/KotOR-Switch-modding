@@ -8,10 +8,10 @@ import path from "node:path"
 import type { Config } from "~/steps/util/config"
 import { FSHelpers } from "~/steps/util/fs-helpers"
 
-import type { ActionParams } from "./command"
 
-type InitializeParams = Omit<ActionParams, "desktopSymlink"> & {
+type InitializeParams = {
   desktopSymlink?: string
+  force?: boolean
   config: Config
 }
 
