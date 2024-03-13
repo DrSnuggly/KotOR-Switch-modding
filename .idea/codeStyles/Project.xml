@@ -38,7 +38,7 @@
       </indentOptions>
     </codeStyleSettings>
     <codeStyleSettings language="JavaScript">
-      <option name="WRAP_ON_TYPING" value="1" />
+      <option name="WRAP_ON_TYPING" value="0" />
       <option name="SOFT_MARGINS" value="80" />
       <indentOptions>
         <option name="INDENT_SIZE" value="2" />
@@ -53,7 +53,7 @@
       <option name="KEEP_SIMPLE_BLOCKS_IN_ONE_LINE" value="true" />
       <option name="KEEP_SIMPLE_METHODS_IN_ONE_LINE" value="true" />
       <option name="WRAP_COMMENTS" value="true" />
-      <option name="WRAP_ON_TYPING" value="1" />
+      <option name="WRAP_ON_TYPING" value="0" />
       <option name="SOFT_MARGINS" value="80" />
       <indentOptions>
         <option name="INDENT_SIZE" value="2" />
