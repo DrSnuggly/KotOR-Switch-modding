@@ -17,9 +17,7 @@ process.stdout.on("resize", () => {
 export const finalizedCanaryFileName = ".finalized"
 
 // exit codes
-export const UNSUPPORTED_GAME = 1
-export const ALREADY_FINALIZED = 2
-export const INVALID_INPUT = 3
-export const FILE_SYSTEM_ERROR = 4
-export const BACKUP_ALREADY_EXISTS = 5
-export const UNSUPPORTED_LANGUAGE = 6
+export const ALREADY_FINALIZED = 1
+export const INVALID_INPUT = 2
+export const FILE_SYSTEM_ERROR = 3
+export const BACKUP_ALREADY_EXISTS = 4
