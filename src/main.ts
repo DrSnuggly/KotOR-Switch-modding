@@ -8,11 +8,7 @@ import { buildInitializeCommand } from "~/steps/initialize/command"
 
 globalThis.wasWarned = false
 
-type CommandOptions = {
-  configFile: string
-}
-
-export type MainCommand = Command<[], CommandOptions>
+export type MainCommand = Command<[], { configFile: string }>
 export const mainCommand: MainCommand = new Command()
   .name("ksm")
   .version("3.0.0")
