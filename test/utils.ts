@@ -37,15 +37,3 @@ export function writeConfigFile(config: ResolvableConfigData) {
   fse.writeJSONSync(configFile, config)
   return { tempDirPath, configFile, resolvedConfig: clonedConfig as ConfigData }
 }
-
-export function writeGameStructure(config: ResolvableConfigData) {
-  const { tempDirPath, configFile, resolvedConfig } = writeConfigFile(config)
-
-  fse.writeJSONSync(configFile, resolvedConfig)
-  fse.mkdirSync(path.join(tempDirPath, resolvedConfig.gameRoot))
-  fse.mkdirSync(path.join(tempDirPath, resolvedConfig.outputTo))
-  fse.mkdirSync(path.join(tempDirPath, resolvedConfig.backupTo))
-  fse.mkdirSync(path.join(tempDirPath, resolvedConfig.needsProcessingTo))
-
-  return configFile
-}

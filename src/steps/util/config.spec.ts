@@ -241,7 +241,7 @@ describe("config properties", () => {
     const configData = {
       ...relativeK1Config,
       [property1]: path.join(
-        relativeK1Config[property2 as keyof ConfigData] as string,
+        relativeK1Config[property2 as keyof ConfigData],
         property1
       ),
     }
